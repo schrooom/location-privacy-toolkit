@@ -1,0 +1,125 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title> Privacy settings </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Privacy settings</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <div>
+    <div class="rating-container">
+      <ion-button
+        class="rating-item"
+        fill="outline"
+        (click)="onQualityRatingDetailsClick()"
+        ><ion-label color="medium">
+          service
+          <br />
+          <ion-icon
+            *ngFor="let i of qualityLevelIcons.full"
+            name="star"
+            color="primary"
+          >
+          </ion-icon>
+          <ion-icon
+            *ngFor="let i of qualityLevelIcons.half"
+            name="star-half-outline"
+            color="primary"
+          >
+          </ion-icon>
+          <ion-icon
+            *ngFor="let i of qualityLevelIcons.empty"
+            name="star-outline"
+            color="primary"
+          >
+          </ion-icon>
+        </ion-label>
+      </ion-button>
+      <ion-button
+        class="rating-item"
+        fill="outline"
+        (click)="onPrivacyRatingDetailsClick()"
+      >
+        <ion-label color="medium" class="ion-text-wrap">
+          privacy
+          <br />
+          <ion-icon
+            *ngFor="let i of privacyLevelIcons.full"
+            name="shield"
+            color="primary"
+          >
+          </ion-icon>
+          <ion-icon
+            *ngFor="let i of privacyLevelIcons.half"
+            name="shield-half-outline"
+            color="primary"
+          >
+          </ion-icon>
+          <ion-icon
+            *ngFor="let i of privacyLevelIcons.empty"
+            name="shield-outline"
+            color="primary"
+          >
+          </ion-icon>
+        </ion-label>
+      </ion-button>
+    </div>
+
+    <ion-list>
+      <ion-item *ngFor="let option of locationOptions">
+        <ion-avatar slot="start">
+          <ion-icon [name]="getIcon(option.type)"></ion-icon>
+        </ion-avatar>
+        <ion-label>
+          <h3 (click)="showLocationOptionDetails(option.type)">
+            {{ getTitle(option.type) | translate }}
+            <ion-icon id="help-icon" name="help-circle-outline"></ion-icon>
+            <ion-chip
+              *ngIf="getValueLabel(option).length"
+              class="range-label-chip"
+              color="primary"
+            >
+              {{ getValueLabel(option) }}
+            </ion-chip>
+          </h3>
+          <p>{{ getSubtitle(option.type) | translate }}</p>
+          <ion-range
+            *ngIf="getType(option.type) === 'number'"
+            [min]="0"
+            [max]="getSteps(option.type).length - 1"
+            step="1"
+            ticks="true"
+            snaps="true"
+            [(ngModel)]="option.value"
+            (ionChange)="onOptionChange()"
+          >
+          </ion-range>
+          <ion-label
+            *ngIf="getMinLabel(option.type).length"
+            class="range-min-label"
+            color="medium"
+          >
+            {{ getMinLabel(option.type) }}
+          </ion-label>
+          <ion-label
+            *ngIf="getMaxLabel(option.type).length"
+            class="range-max-label"
+            color="medium"
+          >
+            {{ getMaxLabel(option.type) }}
+          </ion-label>
+        </ion-label>
+        <ion-toggle
+          *ngIf="getType(option.type) === 'boolean'"
+          [(ngModel)]="option.value"
+          (ngModelChange)="onOptionChange()"
+        ></ion-toggle>
+      </ion-item>
+    </ion-list>
+  </div>
+</ion-content>

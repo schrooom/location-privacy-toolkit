@@ -1,0 +1,38 @@
+ion-avatar {
+  width: auto;
+  margin-top: 1em;
+  margin-left: 50%;
+  transform: translate(-50%, 0);
+  width: 4.5em;
+  height: 4.5em;
+  padding: 1em;
+  background-color: #eeeeee;
+  border-radius: 100%;
+  ion-icon {
+    width: 100%;
+    height: 100%;
+    color: gray;
+  }
+}
+
+#close-icon {
+  position: absolute;
+  top: 1em;
+  right: 1em;
+  height: 1.5em;
+  width: 1.5em;
+  color: gray;
+}
+
+.icon-high {
+  color: rgb(0, 158, 0) !important;
+}
+.icon-medium-high {
+  color: rgb(228, 209, 41) !important;
+}
+.icon-medium-low {
+  color: rgb(218, 123, 0) !important;
+}
+.icon-low {
+  color: rgb(196, 0, 0) !important;
+}

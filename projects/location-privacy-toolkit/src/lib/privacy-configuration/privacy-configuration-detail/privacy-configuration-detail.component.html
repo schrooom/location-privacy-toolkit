@@ -1,0 +1,13 @@
+<ion-content fullscreen>
+  <ion-avatar>
+    <ion-icon [name]="icon" [ngClass]="iconClass"></ion-icon>
+  </ion-avatar>
+  <ion-card-header>
+    <ion-card-title>{{ title | translate }}</ion-card-title>
+    <ion-card-subtitle>{{ subtitle | translate }}</ion-card-subtitle>
+  </ion-card-header>
+  <ion-card-content [innerHtml]="description | translate"> </ion-card-content>
+  <ion-card-content [innerHtml]="detailDescription | translate">
+  </ion-card-content>
+  <ion-icon id="close-icon" name="close" (click)="onCloseClick()"></ion-icon>
+</ion-content>
