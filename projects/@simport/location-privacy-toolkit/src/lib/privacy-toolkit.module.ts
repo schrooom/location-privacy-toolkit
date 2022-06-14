@@ -7,15 +7,17 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core'
 import { TranslateHttpLoader } from '@ngx-translate/http-loader'
 import { PrivacyConfigurationDetailComponent } from './privacy-configuration/privacy-configuration-detail/privacy-configuration-detail.component'
 import { IonicModule } from '@ionic/angular'
+import { PrivacyConfigurationOptionComponent } from './privacy-configuration/privacy-configuration-options/privacy-configuration-options.component'
 
 export function createTranslateLoader(http: HttpClient) {
-  return new TranslateHttpLoader(http, './../assets/i18n/', '.json')
+  return new TranslateHttpLoader(http, './assets/i18n/', '.json')
 }
 
 @NgModule({
   declarations: [
     PrivacyConfigurationComponent,
     PrivacyConfigurationDetailComponent,
+    PrivacyConfigurationOptionComponent,
   ],
   imports: [
     IonicModule,
@@ -32,4 +34,4 @@ export function createTranslateLoader(http: HttpClient) {
   ],
   exports: [PrivacyConfigurationComponent],
 })
-export class LocationPrivacyToolkitModule {}
+export class PrivacyToolkitModule {}

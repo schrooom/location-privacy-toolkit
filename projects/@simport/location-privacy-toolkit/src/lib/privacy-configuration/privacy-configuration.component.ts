@@ -1,13 +1,18 @@
 import { Component } from '@angular/core'
 import {
+  ILocationOptionType,
   LocationOption,
-  LocationOptionType,
   LocationPrivacyLevel,
   LocationQualityLevel,
-} from '../location-management/location-management'
+} from '../location-management/location-management.types'
 import { LocationManagementService } from '../location-management/location-management.service'
-import { ModalController, IonRouterOutlet } from '@ionic/angular'
+import {
+  ModalController,
+  IonRouterOutlet,
+  PopoverController,
+} from '@ionic/angular'
 import { PrivacyConfigurationDetailComponent } from './privacy-configuration-detail/privacy-configuration-detail.component'
+import { PrivacyConfigurationOptionComponent } from './privacy-configuration-options/privacy-configuration-options.component'
 
 @Component({
   selector: 'privacy-configuration',
@@ -17,9 +22,18 @@ import { PrivacyConfigurationDetailComponent } from './privacy-configuration-det
 export class PrivacyConfigurationComponent {
   locationOptions: LocationOption[] = []
 
+  get isExpertModeActive(): Boolean {
+    return this.locationManagementService.isExpertMode
+  }
+
+  set isExpertModeActive(newValue: Boolean) {
+    this.locationManagementService.isExpertMode = newValue
+  }
+
   constructor(
     private locationManagementService: LocationManagementService,
     private modalController: ModalController,
+    private popoverCtrl: PopoverController,
     private routerOutlet: IonRouterOutlet
   ) {
     this.locationManagementService.locationOptions.subscribe(
@@ -53,65 +67,34 @@ export class PrivacyConfigurationComponent {
     return new RatingIcons(full, half, empty)
   }
 
-  getTitle(type: LocationOptionType): string {
-    return LocationOptionType.title(type)
+  getMinLabel(type: ILocationOptionType): string {
+    const labels = type.stepLabels ?? []
+    return labels.length > 0 ? labels[0] : ''
   }
 
-  getSubtitle(type: LocationOptionType): string {
-    return LocationOptionType.subtitle(type)
-  }
-
-  getDescription(type: LocationOptionType): string {
-    return LocationOptionType.description(type)
-  }
-
-  getOptionDescription(type: LocationOptionType): string {
-    return LocationOptionType.optionDescription(type)
-  }
-
-  getIcon(type: LocationOptionType): string {
-    return LocationOptionType.icon(type)
-  }
-
-  getMinLabel(type: LocationOptionType): string {
-    const labels = LocationOptionType.stepLabels(type)
-    return labels.length > 0 ? LocationOptionType.stepLabels(type)[0] : ''
-  }
-
-  getMaxLabel(type: LocationOptionType): string {
-    const labels = LocationOptionType.stepLabels(type)
-    return labels.length > 0
-      ? LocationOptionType.stepLabels(type)[labels.length - 1]
-      : ''
-  }
-
-  getType(type: LocationOptionType): string {
-    return LocationOptionType.dataType(type)
-  }
-
-  getSteps(type: LocationOptionType): number[] {
-    return LocationOptionType.steps(type)
+  getMaxLabel(type: ILocationOptionType): string {
+    const labels = type.stepLabels ?? []
+    return labels.length > 0 ? labels[labels.length - 1] : ''
   }
 
   getValueLabel(option: LocationOption): string {
     if (typeof option.value !== 'number') {
       return ''
     }
-    switch (option.type) {
-      case LocationOptionType.accuracy:
-      case LocationOptionType.interval:
-        return LocationOptionType.stepLabels(option.type)[option.value]
+    const labels = option.type.stepLabels ?? []
+    if (labels.length > option.value) {
+      return labels[option.value]
     }
     return ''
   }
 
-  async showLocationOptionDetails(type: LocationOptionType) {
+  async showLocationOptionDetails(type: ILocationOptionType) {
     await this.showDetails(
-      this.getTitle(type),
-      this.getSubtitle(type),
-      this.getDescription(type),
-      this.getOptionDescription(type),
-      this.getIcon(type)
+      type.title,
+      type.subtitle,
+      type.description,
+      type.optionDescription,
+      type.icon
     )
   }
 
@@ -134,8 +117,8 @@ export class PrivacyConfigurationComponent {
     title: string,
     subtitle: string,
     description: string,
-    detailDescription: string,
-    icon: string,
+    detailDescription?: string,
+    icon?: string,
     iconClass?: string
   ) {
     const modal = await this.modalController.create({
@@ -165,6 +148,16 @@ export class PrivacyConfigurationComponent {
 
   async onQualityRatingDetailsClick() {
     await this.showRatingDetails('quality', 'star')
+  }
+
+  async onOptionsClick(e: Event) {
+    e.stopPropagation()
+    const popover = await this.popoverCtrl.create({
+      component: PrivacyConfigurationOptionComponent,
+      event: e,
+      translucent: true,
+    })
+    return await popover.present()
   }
 }
 

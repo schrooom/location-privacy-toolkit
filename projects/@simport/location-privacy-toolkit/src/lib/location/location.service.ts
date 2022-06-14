@@ -6,8 +6,8 @@ import {
   GeolocationPluginPermissions,
 } from '@capacitor/geolocation'
 import { Platform } from '@ionic/angular'
-import { LocationOptionType } from '../location-management/location-management'
 import { LocationManagementService } from '../location-management/location-management.service'
+import { LocationOptionTypeIdentifier } from '../location-management/location-management.types'
 
 @Injectable({
   providedIn: 'root',
@@ -24,7 +24,7 @@ export class LocationService {
         if (!newOptions || !newOptions.length) return
         const canUseNavigation =
           await this.locationManagementService.loadLocationOption(
-            LocationOptionType.navigation
+            LocationOptionTypeIdentifier.continuousAccess
           )
         if (!canUseNavigation) {
           this.removeListener()
@@ -36,7 +36,7 @@ export class LocationService {
   async canUseLocation(requestPermission: Boolean = false): Promise<Boolean> {
     const locationOption =
       await this.locationManagementService.loadLocationOption(
-        LocationOptionType.playgrounds
+        LocationOptionTypeIdentifier.punctualAccess
       )
     if (locationOption && locationOption.value) {
       try {
@@ -92,7 +92,7 @@ export class LocationService {
   async registerListener(callback: (location: Position) => void) {
     const locationOption =
       await this.locationManagementService.loadLocationOption(
-        LocationOptionType.navigation
+        LocationOptionTypeIdentifier.continuousAccess
       )
     if (locationOption && locationOption.value) {
       if (this.callbackID) return

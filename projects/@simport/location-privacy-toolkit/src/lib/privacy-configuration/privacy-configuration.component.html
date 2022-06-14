@@ -1,13 +1,18 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title> Privacy settings </ion-title>
+    <ion-title> Location privacy </ion-title>
+    <ion-icon
+      slot="end"
+      name="ellipsis-vertical"
+      (click)="onOptionsClick($event)"
+    ></ion-icon>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">Privacy settings</ion-title>
+      <ion-title size="large">Location privacy</ion-title>
     </ion-toolbar>
   </ion-header>
 
@@ -18,7 +23,7 @@
         fill="outline"
         (click)="onQualityRatingDetailsClick()"
         ><ion-label color="medium">
-          service
+          {{ 'location-option.rating.quality.shortTitle' | translate }}
           <br />
           <ion-icon
             *ngFor="let i of qualityLevelIcons.full"
@@ -46,7 +51,7 @@
         (click)="onPrivacyRatingDetailsClick()"
       >
         <ion-label color="medium" class="ion-text-wrap">
-          privacy
+          {{ 'location-option.rating.privacy.shortTitle' | translate }}
           <br />
           <ion-icon
             *ngFor="let i of privacyLevelIcons.full"
@@ -70,14 +75,35 @@
       </ion-button>
     </div>
 
-    <ion-list>
+    <!-- simple mode options -->
+    <ion-list *ngIf="!isExpertModeActive">
+      <ion-item>
+        <ion-label>
+          <h3>
+            {{ 'location-option.simple.title' | translate }}
+            <ion-icon id="help-icon" name="help-circle-outline"></ion-icon>
+            <ion-chip class="range-label-chip" color="primary"> TODO </ion-chip>
+          </h3>
+          <p>{{ 'location-option.simple.subtitle' | translate }}</p>
+          <ion-range min="0" max="2" step="1" ticks="true" snaps="true">
+            <ion-icon slot="start" color="medium" size="small" name="star">
+            </ion-icon>
+            <ion-icon slot="end" color="medium" size="small" name="shield">
+            </ion-icon>
+          </ion-range>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+
+    <!-- expert mode options -->
+    <ion-list *ngIf="isExpertModeActive">
       <ion-item *ngFor="let option of locationOptions">
         <ion-avatar slot="start">
-          <ion-icon [name]="getIcon(option.type)"></ion-icon>
+          <ion-icon [name]="option.type.icon"></ion-icon>
         </ion-avatar>
         <ion-label>
           <h3 (click)="showLocationOptionDetails(option.type)">
-            {{ getTitle(option.type) | translate }}
+            {{ option.type.title | translate }}
             <ion-icon id="help-icon" name="help-circle-outline"></ion-icon>
             <ion-chip
               *ngIf="getValueLabel(option).length"
@@ -87,11 +113,11 @@
               {{ getValueLabel(option) }}
             </ion-chip>
           </h3>
-          <p>{{ getSubtitle(option.type) | translate }}</p>
+          <p>{{ option.type.subtitle | translate }}</p>
           <ion-range
-            *ngIf="getType(option.type) === 'number'"
+            *ngIf="option.type.dataType === 'number'"
             [min]="0"
-            [max]="getSteps(option.type).length - 1"
+            [max]="(option.type.steps ?? []).length - 1"
             step="1"
             ticks="true"
             snaps="true"
@@ -115,7 +141,7 @@
           </ion-label>
         </ion-label>
         <ion-toggle
-          *ngIf="getType(option.type) === 'boolean'"
+          *ngIf="option.type.dataType === 'boolean'"
           [(ngModel)]="option.value"
           (ngModelChange)="onOptionChange()"
         ></ion-toggle>

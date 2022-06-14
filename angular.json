@@ -6,23 +6,23 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "location-privacy-toolkit": {
+    "privacy-toolkit": {
       "projectType": "library",
-      "root": "projects/location-privacy-toolkit",
-      "sourceRoot": "projects/location-privacy-toolkit/src",
+      "root": "projects/@simport/location-privacy-toolkit",
+      "sourceRoot": "projects/@simport/location-privacy-toolkit/src",
       "prefix": "lib",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
-            "project": "projects/location-privacy-toolkit/ng-package.json"
+            "project": "projects/@simport/location-privacy-toolkit/ng-package.json"
           },
           "configurations": {
             "production": {
-              "tsConfig": "projects/location-privacy-toolkit/tsconfig.lib.prod.json"
+              "tsConfig": "projects/@simport/location-privacy-toolkit/tsconfig.lib.prod.json"
             },
             "development": {
-              "tsConfig": "projects/location-privacy-toolkit/tsconfig.lib.json"
+              "tsConfig": "projects/@simport/location-privacy-toolkit/tsconfig.lib.json"
             }
           },
           "defaultConfiguration": "production"
@@ -30,13 +30,13 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "projects/location-privacy-toolkit/src/test.ts",
-            "tsConfig": "projects/location-privacy-toolkit/tsconfig.spec.json",
-            "karmaConfig": "projects/location-privacy-toolkit/karma.conf.js"
+            "main": "projects/@simport/location-privacy-toolkit/src/test.ts",
+            "tsConfig": "projects/@simport/location-privacy-toolkit/tsconfig.spec.json",
+            "karmaConfig": "projects/@simport/location-privacy-toolkit/karma.conf.js"
           }
         }
       }
     }
   },
-  "defaultProject": "location-privacy-toolkit"
+  "defaultProject": "@simport/location-privacy-toolkit"
 }

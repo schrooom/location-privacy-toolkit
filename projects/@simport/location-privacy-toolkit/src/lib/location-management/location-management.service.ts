@@ -1,13 +1,22 @@
 import { Injectable } from '@angular/core'
 import { BehaviorSubject } from 'rxjs'
 import { Storage } from '@capacitor/storage'
-import { LocationOption, LocationOptionType } from './location-management'
+import {
+  LocationAccuracyOptionType,
+  LocationContinuousOptionType,
+  LocationIntervalOptionType,
+  LocationPunctualAccessOptionType,
+} from './location-management.definitions'
 import { Position } from '@capacitor/geolocation'
 import { point } from '@turf/helpers'
 import { randomPoint } from '@turf/random'
 import buffer from '@turf/buffer'
 import bbox from '@turf/bbox'
 import transformTranslate from '@turf/transform-translate'
+import {
+  LocationOption,
+  LocationOptionTypeIdentifier,
+} from './location-management.types'
 
 @Injectable({
   providedIn: 'root',
@@ -21,18 +30,32 @@ export class LocationManagementService {
   static LOCATION_OPTIONS_STORAGE_KEY = 'location_options_storage'
   static LOCATION_OPTIONS_STORAGE_VERISON_KEY =
     'location_options_storage_version'
-  static LOCATION_OPTIONS_CURRENT_VERSION = '0'
+  static LOCATION_OPTIONS_EXPERT_MODE_KEY = 'location_options_expert_mode'
+  static LOCATION_OPTIONS_CURRENT_VERSION = '1'
 
   private get defaultOptions(): LocationOption[] {
     return [
-      new LocationOption(LocationOptionType.playgrounds),
-      new LocationOption(LocationOptionType.navigation),
-      new LocationOption(LocationOptionType.accuracy),
-      new LocationOption(LocationOptionType.interval),
+      new LocationOption(LocationContinuousOptionType),
+      new LocationOption(LocationPunctualAccessOptionType),
+      new LocationOption(LocationAccuracyOptionType),
+      new LocationOption(LocationIntervalOptionType),
     ]
   }
 
+  private isExpertModeSubject = new BehaviorSubject<Boolean>(false)
+
+  get isExpertMode(): Boolean {
+    return this.isExpertModeSubject.value
+  }
+
+  set isExpertMode(newValue: Boolean) {
+    this.isExpertModeSubject.next(newValue)
+  }
+
   constructor() {
+    this.initLocationOptions()
+    this.initExpertMode()
+
     this.locationOptions.subscribe(async (newOptions) => {
       if (!newOptions || !newOptions.length) return
       await Storage.set({
@@ -40,7 +63,12 @@ export class LocationManagementService {
         value: JSON.stringify(newOptions),
       })
     })
-    this.initLocationOptions()
+    this.isExpertModeSubject.subscribe(async (newIsExpertMode) => {
+      await Storage.set({
+        key: LocationManagementService.LOCATION_OPTIONS_EXPERT_MODE_KEY,
+        value: JSON.stringify(newIsExpertMode),
+      })
+    })
   }
 
   async initLocationOptions() {
@@ -60,6 +88,18 @@ export class LocationManagementService {
     this.locationOptions.next(this.defaultOptions)
   }
 
+  async initExpertMode() {
+    const { value } = await Storage.get({
+      key: LocationManagementService.LOCATION_OPTIONS_EXPERT_MODE_KEY,
+    })
+    if (value && value.length > 0) {
+      try {
+        const isExpertMode = JSON.parse(value) as Boolean
+        this.isExpertModeSubject.next(isExpertMode)
+      } catch (error) {}
+    }
+  }
+
   private async checkVersion(): Promise<void> {
     const { value } = await Storage.get({
       key: LocationManagementService.LOCATION_OPTIONS_STORAGE_VERISON_KEY,
@@ -77,15 +117,11 @@ export class LocationManagementService {
     }
   }
 
-  async loadLocationOption(
-    type: LocationOptionType
-  ): Promise<LocationOption | undefined> {
+  async loadLocationOption(id: String): Promise<LocationOption | undefined> {
     if (!this.locationOptions) {
       await this.initLocationOptions()
     }
-    return this.locationOptions
-      .getValue()
-      .find((o) => (o.type as LocationOptionType) === type)
+    return this.locationOptions.getValue().find((o) => o.type.id === id)
   }
 
   async processLocation(position: Position): Promise<Position | undefined> {
@@ -106,7 +142,7 @@ export class LocationManagementService {
 
   private async shouldUseCachedPosition(): Promise<boolean> {
     const locationIntervalOption = await this.loadLocationOption(
-      LocationOptionType.interval
+      LocationOptionTypeIdentifier.interval
     )
     const locationInterval = LocationOption.extractedValue(
       locationIntervalOption
@@ -123,7 +159,7 @@ export class LocationManagementService {
     position: Position | undefined
   ): Promise<Position | undefined> {
     const locationAccuracyOption = await this.loadLocationOption(
-      LocationOptionType.accuracy
+      LocationOptionTypeIdentifier.accuracy
     )
     const locationAccuracy = LocationOption.extractedValue(
       locationAccuracyOption

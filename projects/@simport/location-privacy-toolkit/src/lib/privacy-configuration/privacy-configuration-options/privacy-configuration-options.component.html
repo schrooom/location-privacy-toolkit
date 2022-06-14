@@ -1,0 +1,13 @@
+<ion-content>
+  <ion-list lines="full">
+    <ion-item (click)="onExpertModeClick()">
+      <ion-icon name="hammer-outline" slot="start"></ion-icon>
+      <ion-label>{{ 'options.expertMode' | translate }}</ion-label>
+      <ion-toggle
+        [(ngModel)]="isExpertModeActive"
+        (ngModelChange)="onExpertModeClick()"
+        slot="end"
+      ></ion-toggle>
+    </ion-item>
+  </ion-list>
+</ion-content>
