@@ -19,19 +19,21 @@ export class LocationOption {
   }
 
   static privacyLevel(option: LocationOption): LocationPrivacyLevel {
-    const privacyLevel = option.value / this.getChoices(option)
+    const privacyLevel = option.value / (this.getChoices(option) - 1)
     const privacyLevels = Object.keys(LocationPrivacyLevel).length / 2 - 1
     return privacyLevels - privacyLevel * privacyLevels
   }
 
   static qualityLevel(option: LocationOption): LocationQualityLevel {
-    const usabilityLevel = option.value / this.getChoices(option)
+    const usabilityLevel = option.value / (this.getChoices(option) - 1)
     const usabilityLevels = Object.keys(LocationQualityLevel).length / 2 - 1
     return usabilityLevel * usabilityLevels
   }
 
   static combinedPrivacyLevel(options: LocationOption[]): LocationPrivacyLevel {
     const privacyLevels = options
+      // exclude non-expert options, since these are basically controlling the expert options
+      .filter((o) => o.type.isExpertOption)
       .map((o) => Number(LocationOption.privacyLevel(o)))
       .reduce((a, b) => a + b, 0)
     return privacyLevels / options.length
@@ -39,26 +41,28 @@ export class LocationOption {
 
   static combinedQualityLevel(options: LocationOption[]): LocationQualityLevel {
     const usabilityLevels = options
+      // exclude non-expert options, since these are basically controlling the expert options
+      .filter((o) => o.type.isExpertOption)
       .map((o) => Number(LocationOption.qualityLevel(o)))
       .reduce((a, b) => a + b, 0)
     return usabilityLevels / options.length
   }
 
   private static getChoices(option: LocationOption): number {
-    if (option.type.dataType == LocationOptionDataType.boolean) {
-      return 2
-    } else if (option.type.steps) {
-      return option.type.steps.length - 1
+    if (option.type.steps) {
+      return option.type.steps.length
     }
-    return 1
+    return 2
   }
 }
 
 export enum LocationOptionTypeIdentifier {
+  simple = 'simple',
   continuousAccess = 'continuousAccess',
   punctualAccess = 'punctualAccess',
   accuracy = 'accuracy',
   interval = 'interval',
+  autoRemoval = 'autoRemoval',
 }
 
 export enum LocationOptionDataType {
@@ -86,6 +90,11 @@ export interface ILocationOptionType {
   subtitle: string
   description: string
   dataType: LocationOptionDataType
+  isExpertOption: boolean
+
+  privacyPreset: any
+  compromisePreset: any
+  serviceQualityPreset: any
 
   optionDescription?: string
   icon?: string

@@ -10,7 +10,7 @@ import { IonicModule } from '@ionic/angular'
 import { PrivacyConfigurationOptionComponent } from './privacy-configuration/privacy-configuration-options/privacy-configuration-options.component'
 
 export function createTranslateLoader(http: HttpClient) {
-  return new TranslateHttpLoader(http, './assets/i18n/', '.json')
+  return new TranslateHttpLoader(http, '../src/assets/i18n/', '.json')
 }
 
 @NgModule({
@@ -30,6 +30,7 @@ export function createTranslateLoader(http: HttpClient) {
         useFactory: createTranslateLoader,
         deps: [HttpClient],
       },
+      isolate: true,
     }),
   ],
   exports: [PrivacyConfigurationComponent],

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core'
 import { BehaviorSubject } from 'rxjs'
 import { Storage } from '@capacitor/storage'
 import {
+  LocationSimpleOptionType,
   LocationAccuracyOptionType,
   LocationContinuousOptionType,
   LocationIntervalOptionType,
@@ -35,6 +36,7 @@ export class LocationManagementService {
 
   private get defaultOptions(): LocationOption[] {
     return [
+      new LocationOption(LocationSimpleOptionType),
       new LocationOption(LocationContinuousOptionType),
       new LocationOption(LocationPunctualAccessOptionType),
       new LocationOption(LocationAccuracyOptionType),

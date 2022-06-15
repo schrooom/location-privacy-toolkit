@@ -2,6 +2,7 @@ import { Component } from '@angular/core'
 import {
   ILocationOptionType,
   LocationOption,
+  LocationOptionTypeIdentifier,
   LocationPrivacyLevel,
   LocationQualityLevel,
 } from '../location-management/location-management.types'
@@ -13,6 +14,7 @@ import {
 } from '@ionic/angular'
 import { PrivacyConfigurationDetailComponent } from './privacy-configuration-detail/privacy-configuration-detail.component'
 import { PrivacyConfigurationOptionComponent } from './privacy-configuration-options/privacy-configuration-options.component'
+import { LocationSimpleOptionType } from '../location-management/location-management.definitions'
 
 @Component({
   selector: 'privacy-configuration',
@@ -20,7 +22,13 @@ import { PrivacyConfigurationOptionComponent } from './privacy-configuration-opt
   styleUrls: ['privacy-configuration.component.scss'],
 })
 export class PrivacyConfigurationComponent {
-  locationOptions: LocationOption[] = []
+  private locationOptions: LocationOption[] = []
+
+  get currentLocationOptions(): LocationOption[] {
+    return this.locationOptions.filter(
+      (option) => option.type.isExpertOption == this.isExpertModeActive
+    )
+  }
 
   get isExpertModeActive(): Boolean {
     return this.locationManagementService.isExpertMode
@@ -67,17 +75,17 @@ export class PrivacyConfigurationComponent {
     return new RatingIcons(full, half, empty)
   }
 
-  getMinLabel(type: ILocationOptionType): string {
+  getLocationOptionMinLabel(type: ILocationOptionType): string {
     const labels = type.stepLabels ?? []
     return labels.length > 0 ? labels[0] : ''
   }
 
-  getMaxLabel(type: ILocationOptionType): string {
+  getLocationOptionMaxLabel(type: ILocationOptionType): string {
     const labels = type.stepLabels ?? []
     return labels.length > 0 ? labels[labels.length - 1] : ''
   }
 
-  getValueLabel(option: LocationOption): string {
+  getLocationOptionValueLabel(option: LocationOption): string {
     if (typeof option.value !== 'number') {
       return ''
     }
@@ -138,7 +146,30 @@ export class PrivacyConfigurationComponent {
     await modal.present()
   }
 
-  onOptionChange() {
+  onLocationOptionChange(option: LocationOption) {
+    if (option.type.id == LocationOptionTypeIdentifier.simple) {
+      // if simple-options were changed, adjust underlying expert-options accordingly
+      const newOptions = this.locationOptions
+      newOptions.forEach((o) => {
+        if (o.type.isExpertOption) {
+          switch (option.value) {
+            case LocationSimpleOptionType.privacyPreset:
+              o.value = o.type.privacyPreset
+              break
+            case LocationSimpleOptionType.compromisePreset:
+              o.value = o.type.compromisePreset
+              break
+            case LocationSimpleOptionType.serviceQualityPreset:
+              o.value = o.type.serviceQualityPreset
+              break
+            default:
+              break
+          }
+        }
+        return o
+      })
+      this.locationOptions = newOptions
+    }
     this.locationManagementService.locationOptions.next(this.locationOptions)
   }
 

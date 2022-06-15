@@ -1,9 +1,10 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title> Location privacy </ion-title>
+    <ion-title> {{ 'general.title' | translate }} </ion-title>
     <ion-icon
       slot="end"
       name="ellipsis-vertical"
+      color="medium"
       (click)="onOptionsClick($event)"
     ></ion-icon>
   </ion-toolbar>
@@ -12,7 +13,7 @@
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">Location privacy</ion-title>
+      <ion-title size="large">{{ 'general.title' | translate }}</ion-title>
     </ion-toolbar>
   </ion-header>
 
@@ -75,30 +76,9 @@
       </ion-button>
     </div>
 
-    <!-- simple mode options -->
-    <ion-list *ngIf="!isExpertModeActive">
-      <ion-item>
-        <ion-label>
-          <h3>
-            {{ 'location-option.simple.title' | translate }}
-            <ion-icon id="help-icon" name="help-circle-outline"></ion-icon>
-            <ion-chip class="range-label-chip" color="primary"> TODO </ion-chip>
-          </h3>
-          <p>{{ 'location-option.simple.subtitle' | translate }}</p>
-          <ion-range min="0" max="2" step="1" ticks="true" snaps="true">
-            <ion-icon slot="start" color="medium" size="small" name="star">
-            </ion-icon>
-            <ion-icon slot="end" color="medium" size="small" name="shield">
-            </ion-icon>
-          </ion-range>
-        </ion-label>
-      </ion-item>
-    </ion-list>
-
-    <!-- expert mode options -->
-    <ion-list *ngIf="isExpertModeActive">
-      <ion-item *ngFor="let option of locationOptions">
-        <ion-avatar slot="start">
+    <ion-list>
+      <ion-item *ngFor="let option of currentLocationOptions">
+        <ion-avatar *ngIf="option.type.icon" slot="start">
           <ion-icon [name]="option.type.icon"></ion-icon>
         </ion-avatar>
         <ion-label>
@@ -106,11 +86,11 @@
             {{ option.type.title | translate }}
             <ion-icon id="help-icon" name="help-circle-outline"></ion-icon>
             <ion-chip
-              *ngIf="getValueLabel(option).length"
+              *ngIf="getLocationOptionValueLabel(option).length"
               class="range-label-chip"
               color="primary"
             >
-              {{ getValueLabel(option) }}
+              {{ getLocationOptionValueLabel(option) }}
             </ion-chip>
           </h3>
           <p>{{ option.type.subtitle | translate }}</p>
@@ -122,28 +102,28 @@
             ticks="true"
             snaps="true"
             [(ngModel)]="option.value"
-            (ionChange)="onOptionChange()"
+            (ionChange)="onLocationOptionChange(option)"
           >
           </ion-range>
           <ion-label
-            *ngIf="getMinLabel(option.type).length"
+            *ngIf="getLocationOptionMinLabel(option.type).length"
             class="range-min-label"
             color="medium"
           >
-            {{ getMinLabel(option.type) }}
+            {{ getLocationOptionMinLabel(option.type) }}
           </ion-label>
           <ion-label
-            *ngIf="getMaxLabel(option.type).length"
+            *ngIf="getLocationOptionMaxLabel(option.type).length"
             class="range-max-label"
             color="medium"
           >
-            {{ getMaxLabel(option.type) }}
+            {{ getLocationOptionMaxLabel(option.type) }}
           </ion-label>
         </ion-label>
         <ion-toggle
           *ngIf="option.type.dataType === 'boolean'"
           [(ngModel)]="option.value"
-          (ngModelChange)="onOptionChange()"
+          (ngModelChange)="onLocationOptionChange(option)"
         ></ion-toggle>
       </ion-item>
     </ion-list>

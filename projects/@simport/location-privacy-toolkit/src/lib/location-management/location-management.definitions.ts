@@ -30,7 +30,11 @@ export const LocationContinuousOptionType: ILocationOptionType = {
   description: `location-option.${LocationOptionTypeIdentifier.continuousAccess}.description`,
   optionDescription: `location-option.${LocationOptionTypeIdentifier.continuousAccess}.detailDescription`,
   icon: 'repeat-outline',
+  isExpertOption: true,
   defaultValue: true,
+  privacyPreset: false,
+  compromisePreset: true,
+  serviceQualityPreset: true,
 }
 
 export const LocationPunctualAccessOptionType: ILocationOptionType = {
@@ -41,7 +45,11 @@ export const LocationPunctualAccessOptionType: ILocationOptionType = {
   description: `location-option.${LocationOptionTypeIdentifier.punctualAccess}.description`,
   optionDescription: `location-option.${LocationOptionTypeIdentifier.punctualAccess}.detailDescription`,
   icon: 'flash-outline',
+  isExpertOption: true,
   defaultValue: true,
+  privacyPreset: true,
+  compromisePreset: true,
+  serviceQualityPreset: true,
 }
 
 export const LocationAccuracyOptionType: ILocationOptionType = {
@@ -52,14 +60,18 @@ export const LocationAccuracyOptionType: ILocationOptionType = {
   description: `location-option.${LocationOptionTypeIdentifier.accuracy}.description`,
   optionDescription: `location-option.${LocationOptionTypeIdentifier.accuracy}.detailDescription`,
   icon: 'pin-outline',
+  isExpertOption: true,
   steps: [1000, 500, 100, 0],
   stepLabels: [
-    'very coarse',
-    'coarse',
-    'fairly accurate',
-    'as accurate as possible',
+    `location-option.${LocationOptionTypeIdentifier.accuracy}.level0`,
+    `location-option.${LocationOptionTypeIdentifier.accuracy}.level1`,
+    `location-option.${LocationOptionTypeIdentifier.accuracy}.level2`,
+    `location-option.${LocationOptionTypeIdentifier.accuracy}.level3`,
   ],
   defaultValue: 0,
+  privacyPreset: 0,
+  compromisePreset: 2,
+  serviceQualityPreset: 3,
 }
 
 export const LocationIntervalOptionType: ILocationOptionType = {
@@ -70,12 +82,36 @@ export const LocationIntervalOptionType: ILocationOptionType = {
   description: `location-option.${LocationOptionTypeIdentifier.interval}.description`,
   optionDescription: `location-option.${LocationOptionTypeIdentifier.interval}.detailDescription`,
   icon: 'timer-outline',
+  isExpertOption: true,
   steps: [1800, 600, 60, 0],
   stepLabels: [
-    'very infrequent',
-    'infrequent',
-    'fairly frequent',
-    'as frequent as possible',
+    `location-option.${LocationOptionTypeIdentifier.interval}.level0`,
+    `location-option.${LocationOptionTypeIdentifier.interval}.level1`,
+    `location-option.${LocationOptionTypeIdentifier.interval}.level2`,
+    `location-option.${LocationOptionTypeIdentifier.interval}.level3`,
   ],
   defaultValue: 0,
+  privacyPreset: 0,
+  compromisePreset: 2,
+  serviceQualityPreset: 3,
+}
+
+export const LocationSimpleOptionType: ILocationOptionType = {
+  id: LocationOptionTypeIdentifier.simple,
+  title: `location-option.${LocationOptionTypeIdentifier.simple}.title`,
+  dataType: LocationOptionDataType.number,
+  subtitle: `location-option.${LocationOptionTypeIdentifier.simple}.subtitle`,
+  description: `location-option.${LocationOptionTypeIdentifier.simple}.description`,
+  optionDescription: `location-option.${LocationOptionTypeIdentifier.simple}.detailDescription`,
+  isExpertOption: false,
+  steps: [0, 1, 2],
+  stepLabels: [
+    `location-option.${LocationOptionTypeIdentifier.simple}.level0`,
+    `location-option.${LocationOptionTypeIdentifier.simple}.level1`,
+    `location-option.${LocationOptionTypeIdentifier.simple}.level2`,
+  ],
+  defaultValue: 0,
+  privacyPreset: 0,
+  compromisePreset: 1,
+  serviceQualityPreset: 2,
 }
