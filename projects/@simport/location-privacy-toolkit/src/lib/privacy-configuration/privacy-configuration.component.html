@@ -84,7 +84,10 @@
         <ion-label>
           <h3 (click)="showLocationOptionDetails(option.type)">
             {{ option.type.title | translate }}
-            <ion-icon id="help-icon" name="help-circle-outline"></ion-icon>
+            <ion-icon
+              id="help-icon"
+              name="information-circle-outline"
+            ></ion-icon>
             <ion-chip
               *ngIf="getLocationOptionValueLabel(option).length"
               class="range-label-chip"
@@ -125,6 +128,27 @@
           [(ngModel)]="option.value"
           (ngModelChange)="onLocationOptionChange(option)"
         ></ion-toggle>
+      </ion-item>
+
+      <ion-item-divider></ion-item-divider>
+
+      <ion-item detail="true" (click)="showLocationHistory()">
+        <ion-avatar slot="start">
+          <ion-icon name="hourglass-outline"></ion-icon>
+        </ion-avatar>
+        <ion-label>
+          <h3>
+            {{ 'location-option.history.title' | translate }}
+            <ion-icon
+              id="help-icon"
+              name="information-circle-outline"
+              (click)="showLocationHistoryDetails()"
+            ></ion-icon>
+          </h3>
+          <p>
+            {{ 'location-option.history.subtitle' | translate }}
+          </p>
+        </ion-label>
       </ion-item>
     </ion-list>
   </div>

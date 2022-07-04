@@ -1,0 +1,78 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title> {{ 'location-history.title' | translate }} </ion-title>
+    <ion-icon
+      id="close-icon"
+      name="close"
+      slot="end"
+      (click)="onCloseClick()"
+    ></ion-icon>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="map-wrapper">
+    <div class="map" #map></div>
+  </div>
+  <div class="date-button-wrapper">
+    <ion-button
+      class="date-picker-button"
+      id="from-date-trigger"
+      color="medium"
+    >
+      <ion-icon
+        name="calendar-clear-outline"
+        slot="start"
+        size="small"
+      ></ion-icon>
+      <p no-margin>
+        {{ fromDate | date: 'shortDate' }}
+      </p>
+    </ion-button>
+    <ion-button class="date-picker-button" id="to-date-trigger" color="medium">
+      <p no-margin>
+        {{ toDate | date: 'shortDate' }}
+      </p>
+      <ion-icon name="calendar-outline" slot="end" size="small"></ion-icon>
+    </ion-button>
+  </div>
+  <ion-list>
+    <ion-item *ngFor="let location of currentLocations()">
+      <ion-label>
+        <h3>
+          {{ location.coords.latitude.toFixed(3) }} /
+          {{ location.coords.longitude.toFixed(3) }}
+        </h3>
+        <p>
+          {{ location.timestamp | date: 'medium' }}
+        </p>
+      </ion-label>
+      <ion-label slot="end">
+        <ion-icon name="pin-outline" size="small"></ion-icon>
+        {{ location.coords.accuracy.toFixed(0) }}m
+      </ion-label>
+    </ion-item>
+  </ion-list>
+  <ion-popover trigger="from-date-trigger" size="auto">
+    <ng-template>
+      <ion-datetime
+        #fromDatePicker
+        presentation="date"
+        showDefaultButtons="true"
+        [value]="fromDate.toISOString()"
+        (ionChange)="onFromDateChanged(fromDatePicker.value)"
+      ></ion-datetime>
+    </ng-template>
+  </ion-popover>
+  <ion-popover trigger="to-date-trigger" size="auto">
+    <ng-template>
+      <ion-datetime
+        #toDatePicker
+        presentation="date"
+        showDefaultButtons="true"
+        [value]="toDate.toISOString()"
+        (ionChange)="onToDateChanged(toDatePicker.value)"
+      ></ion-datetime>
+    </ng-template>
+  </ion-popover>
+</ion-content>

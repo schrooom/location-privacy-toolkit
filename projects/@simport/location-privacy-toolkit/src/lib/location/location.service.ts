@@ -22,11 +22,11 @@ export class LocationService {
     this.locationManagementService.locationOptions.subscribe(
       async (newOptions) => {
         if (!newOptions || !newOptions.length) return
-        const canUseNavigation =
+        const canUseContinuousLocation =
           await this.locationManagementService.loadLocationOption(
             LocationOptionTypeIdentifier.continuousAccess
           )
-        if (!canUseNavigation) {
+        if (!canUseContinuousLocation) {
           this.removeListener()
         }
       }
@@ -89,6 +89,15 @@ export class LocationService {
     )
   }
 
+  async getCurrentLocation(): Promise<Position | undefined> {
+    const canUseLocation = await this.canUseLocation()
+    if (canUseLocation) {
+      const position = await Geolocation.getCurrentPosition()
+      return await this.locationManagementService.processLocation(position)
+    }
+    return undefined
+  }
+
   async registerListener(callback: (location: Position) => void) {
     const locationOption =
       await this.locationManagementService.loadLocationOption(
@@ -111,15 +120,6 @@ export class LocationService {
         }
       )
     }
-  }
-
-  async getCurrentLocation(): Promise<Position | undefined> {
-    const canUseLocation = await this.canUseLocation()
-    if (canUseLocation) {
-      const position = await Geolocation.getCurrentPosition()
-      return await this.locationManagementService.processLocation(position)
-    }
-    return undefined
   }
 
   // Remove all listeners

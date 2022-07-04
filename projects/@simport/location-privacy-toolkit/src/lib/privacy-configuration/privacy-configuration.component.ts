@@ -14,7 +14,8 @@ import {
 } from '@ionic/angular'
 import { PrivacyConfigurationDetailComponent } from './privacy-configuration-detail/privacy-configuration-detail.component'
 import { PrivacyConfigurationOptionComponent } from './privacy-configuration-options/privacy-configuration-options.component'
-import { LocationSimpleOptionType } from '../location-management/location-management.definitions'
+import { PrivacyHistoryComponent } from './privacy-history/privacy-history.component'
+import { Router } from '@angular/router'
 
 @Component({
   selector: 'privacy-configuration',
@@ -42,7 +43,8 @@ export class PrivacyConfigurationComponent {
     private locationManagementService: LocationManagementService,
     private modalController: ModalController,
     private popoverCtrl: PopoverController,
-    private routerOutlet: IonRouterOutlet
+    private routerOutlet: IonRouterOutlet,
+    private router: Router
   ) {
     this.locationManagementService.locationOptions.subscribe(
       (newOptions: LocationOption[]) => {
@@ -96,6 +98,16 @@ export class PrivacyConfigurationComponent {
     return ''
   }
 
+  async showLocationHistory() {
+    const modal = await this.modalController.create({
+      component: PrivacyHistoryComponent,
+      presentingElement: this.routerOutlet.nativeEl,
+      swipeToClose: true,
+      cssClass: 'auto-height',
+    })
+    await modal.present()
+  }
+
   async showLocationOptionDetails(type: ILocationOptionType) {
     await this.showDetails(
       type.title,
@@ -103,6 +115,16 @@ export class PrivacyConfigurationComponent {
       type.description,
       type.optionDescription,
       type.icon
+    )
+  }
+
+  async showLocationHistoryDetails() {
+    await this.showDetails(
+      'location history title',
+      'location history subtitle',
+      'location history description',
+      'location history further description',
+      'hourglass-outline'
     )
   }
 
@@ -153,13 +175,13 @@ export class PrivacyConfigurationComponent {
       newOptions.forEach((o) => {
         if (o.type.isExpertOption) {
           switch (option.value) {
-            case LocationSimpleOptionType.privacyPreset:
+            case option.type.privacyPreset:
               o.value = o.type.privacyPreset
               break
-            case LocationSimpleOptionType.compromisePreset:
+            case option.type.compromisePreset:
               o.value = o.type.compromisePreset
               break
-            case LocationSimpleOptionType.serviceQualityPreset:
+            case option.type.serviceQualityPreset:
               o.value = o.type.serviceQualityPreset
               break
             default:
@@ -192,7 +214,7 @@ export class PrivacyConfigurationComponent {
   }
 }
 
-export class RatingIcons {
+class RatingIcons {
   full: any[]
   half: any[]
   empty: any[]

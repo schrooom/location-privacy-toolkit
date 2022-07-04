@@ -28,11 +28,12 @@ export class LocationManagementService {
   >([])
   private cachedPosition: Position | undefined = undefined
 
-  static LOCATION_OPTIONS_STORAGE_KEY = 'location_options_storage'
-  static LOCATION_OPTIONS_STORAGE_VERISON_KEY =
+  private static LOCATION_OPTIONS_STORAGE_KEY = 'location_options_storage'
+  private static LOCATION_OPTIONS_STORAGE_VERISON_KEY =
     'location_options_storage_version'
-  static LOCATION_OPTIONS_EXPERT_MODE_KEY = 'location_options_expert_mode'
-  static LOCATION_OPTIONS_CURRENT_VERSION = '1'
+  private static LOCATION_OPTIONS_EXPERT_MODE_KEY =
+    'location_options_expert_mode'
+  private static LOCATION_OPTIONS_CURRENT_VERSION = '1'
 
   private get defaultOptions(): LocationOption[] {
     return [

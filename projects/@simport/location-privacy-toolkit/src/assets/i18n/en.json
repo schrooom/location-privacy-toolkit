@@ -63,6 +63,10 @@
         "description": "You have the ability to choose, which location data you want to share how. This has immediate effects on the quality of service our app can offer.",
         "detailDescription": "<b>high</b> best service quality, all features working as intended.<br><b>medium-high</b> moderate service quality, most features nearly working as intended.<br><b>medium-low</b> low service quality, features working with reduced functionality.<br><b>low</b> worst service quality, features not working as intended."
       }
+    },
+    "history": {
+      "title": "location history",
+      "subtitle": "manage your locations"
     }
   }
 }
