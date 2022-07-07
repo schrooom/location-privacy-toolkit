@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core'
 import { Position } from '@capacitor/geolocation'
+import { DatabaseService } from './database/database.service'
 
 @Injectable({
   providedIn: 'root',
 })
 export class LocationStorageService {
-  constructor() {}
+  constructor(private databaseService: DatabaseService) {}
 
   async getAllLocations(): Promise<Position[]> {
     // TODO: return real data
@@ -25,7 +26,7 @@ export class LocationStorageService {
     ]
   }
 
-  async deleteLocation(uuid: String) {
+  async deleteLocation(location: Position) {
     // TODO: delete location
   }
 

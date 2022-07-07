@@ -6,16 +6,18 @@ import {
   ViewChild,
 } from '@angular/core'
 import { Position } from '@capacitor/geolocation'
-import { ModalController } from '@ionic/angular'
-import { LocationStorageService } from '../../location-storage/location-storage.service'
+import { AlertController, ModalController } from '@ionic/angular'
+import { LocationStorageService } from '../../services/location-storage/location-storage.service'
 import * as maplibreGl from 'maplibre-gl'
 
 @Component({
   selector: 'lib-privacy-history',
-  templateUrl: './privacy-history.component.html',
-  styleUrls: ['./privacy-history.component.scss'],
+  templateUrl: './privacy-configuration-history.component.html',
+  styleUrls: ['./privacy-configuration-history.component.scss'],
 })
-export class PrivacyHistoryComponent implements OnInit, AfterViewInit {
+export class PrivacyConfigurationHistoryComponent
+  implements OnInit, AfterViewInit
+{
   @ViewChild('map')
   private mapContainer!: ElementRef<HTMLElement>
 
@@ -39,7 +41,8 @@ export class PrivacyHistoryComponent implements OnInit, AfterViewInit {
 
   constructor(
     private locationStorageService: LocationStorageService,
-    private modalController: ModalController
+    private modalController: ModalController,
+    private alertController: AlertController
   ) {}
 
   async ngOnInit() {
@@ -131,6 +134,30 @@ export class PrivacyHistoryComponent implements OnInit, AfterViewInit {
 
   async onCloseClick() {
     await this.modalController.dismiss()
+  }
+
+  async onDeleteLocationClick(location: Position) {
+    const alert = await this.alertController.create({
+      header: 'Are you sure to delete this location?',
+      buttons: [
+        {
+          text: 'Cancel',
+        },
+        {
+          text: 'Delete',
+          role: 'destructive',
+          handler: () => {
+            this.locationStorageService.deleteLocation(location)
+            const index = this.locations.indexOf(location, 0)
+            if (index > -1) {
+              this.locations.splice(index, 1)
+            }
+          },
+        },
+      ],
+    })
+
+    await alert.present()
   }
 
   onFromDateChanged(date: any) {

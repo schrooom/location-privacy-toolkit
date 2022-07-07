@@ -5,17 +5,16 @@ import {
   LocationOptionTypeIdentifier,
   LocationPrivacyLevel,
   LocationQualityLevel,
-} from '../location-management/location-management.types'
-import { LocationManagementService } from '../location-management/location-management.service'
+} from '../../services/location-management/location-management.types'
+import { LocationManagementService } from '../../services/location-management/location-management.service'
 import {
   ModalController,
   IonRouterOutlet,
   PopoverController,
 } from '@ionic/angular'
-import { PrivacyConfigurationDetailComponent } from './privacy-configuration-detail/privacy-configuration-detail.component'
-import { PrivacyConfigurationOptionComponent } from './privacy-configuration-options/privacy-configuration-options.component'
-import { PrivacyHistoryComponent } from './privacy-history/privacy-history.component'
-import { Router } from '@angular/router'
+import { PrivacyConfigurationDetailComponent } from '../privacy-configuration-detail/privacy-configuration-detail.component'
+import { PrivacyConfigurationOptionComponent } from './../privacy-configuration-options/privacy-configuration-options.component'
+import { PrivacyConfigurationHistoryComponent } from './../privacy-configuration-history/privacy-configuration-history.component'
 
 @Component({
   selector: 'privacy-configuration',
@@ -43,8 +42,7 @@ export class PrivacyConfigurationComponent {
     private locationManagementService: LocationManagementService,
     private modalController: ModalController,
     private popoverCtrl: PopoverController,
-    private routerOutlet: IonRouterOutlet,
-    private router: Router
+    private routerOutlet: IonRouterOutlet
   ) {
     this.locationManagementService.locationOptions.subscribe(
       (newOptions: LocationOption[]) => {
@@ -100,7 +98,7 @@ export class PrivacyConfigurationComponent {
 
   async showLocationHistory() {
     const modal = await this.modalController.create({
-      component: PrivacyHistoryComponent,
+      component: PrivacyConfigurationHistoryComponent,
       presentingElement: this.routerOutlet.nativeEl,
       swipeToClose: true,
       cssClass: 'auto-height',

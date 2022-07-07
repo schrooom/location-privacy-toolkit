@@ -2,13 +2,13 @@ import { NgModule } from '@angular/core'
 import { HttpClient } from '@angular/common/http'
 import { FormsModule } from '@angular/forms'
 import { BrowserModule } from '@angular/platform-browser'
-import { PrivacyConfigurationComponent } from './privacy-configuration/privacy-configuration.component'
+import { PrivacyConfigurationComponent } from './components/privacy-configuration/privacy-configuration.component'
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core'
 import { TranslateHttpLoader } from '@ngx-translate/http-loader'
-import { PrivacyConfigurationDetailComponent } from './privacy-configuration/privacy-configuration-detail/privacy-configuration-detail.component'
+import { PrivacyConfigurationDetailComponent } from './components/privacy-configuration-detail/privacy-configuration-detail.component'
 import { IonicModule } from '@ionic/angular'
-import { PrivacyConfigurationOptionComponent } from './privacy-configuration/privacy-configuration-options/privacy-configuration-options.component'
-import { PrivacyHistoryComponent } from './privacy-configuration/privacy-history/privacy-history.component'
+import { PrivacyConfigurationOptionComponent } from './components/privacy-configuration-options/privacy-configuration-options.component'
+import { PrivacyConfigurationHistoryComponent } from './components/privacy-configuration-history/privacy-configuration-history.component'
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, '../src/assets/i18n/', '.json')
@@ -19,7 +19,7 @@ export function createTranslateLoader(http: HttpClient) {
     PrivacyConfigurationComponent,
     PrivacyConfigurationDetailComponent,
     PrivacyConfigurationOptionComponent,
-    PrivacyHistoryComponent,
+    PrivacyConfigurationHistoryComponent,
   ],
   imports: [
     IonicModule,

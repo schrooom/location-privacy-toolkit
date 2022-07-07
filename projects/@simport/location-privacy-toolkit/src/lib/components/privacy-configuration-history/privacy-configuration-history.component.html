@@ -48,9 +48,19 @@
         </p>
       </ion-label>
       <ion-label slot="end">
-        <ion-icon name="pin-outline" size="small"></ion-icon>
-        {{ location.coords.accuracy.toFixed(0) }}m
+        <p>{{ location.coords.accuracy.toFixed(0) }}m</p>
       </ion-label>
+      <ion-button
+        slot="end"
+        fill="clear"
+        (click)="onDeleteLocationClick(location)"
+      >
+        <ion-icon
+          slot="icon-only"
+          color="danger"
+          name="trash-outline"
+        ></ion-icon>
+      </ion-button>
     </ion-item>
   </ion-list>
   <ion-popover trigger="from-date-trigger" size="auto">

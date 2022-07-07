@@ -1,5 +1,5 @@
 import { Component } from '@angular/core'
-import { LocationManagementService } from '../../location-management/location-management.service'
+import { LocationManagementService } from '../../services/location-management/location-management.service'
 
 @Component({
   selector: 'privacy-configuration.option',
