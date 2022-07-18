@@ -9,6 +9,7 @@ import { Position } from '@capacitor/geolocation'
 import { AlertController, ModalController } from '@ionic/angular'
 import { LocationStorageService } from '../../services/location-storage/location-storage.service'
 import * as maplibreGl from 'maplibre-gl'
+import { TranslateService } from '@ngx-translate/core'
 
 @Component({
   selector: 'lib-privacy-history',
@@ -42,7 +43,8 @@ export class PrivacyConfigurationHistoryComponent
   constructor(
     private locationStorageService: LocationStorageService,
     private modalController: ModalController,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private translateService: TranslateService
   ) {}
 
   async ngOnInit() {
@@ -138,13 +140,19 @@ export class PrivacyConfigurationHistoryComponent
 
   async onDeleteLocationClick(location: Position) {
     const alert = await this.alertController.create({
-      header: 'Are you sure to delete this location?',
+      header: this.translateService.instant(
+        'simport-location-privacy-toolkit.location-history.deleteDialogTitle'
+      ),
       buttons: [
         {
-          text: 'Cancel',
+          text: this.translateService.instant(
+            'simport-location-privacy-toolkit.general.cancel'
+          ),
         },
         {
-          text: 'Delete',
+          text: this.translateService.instant(
+            'simport-location-privacy-toolkit.general.delete'
+          ),
           role: 'destructive',
           handler: () => {
             this.locationStorageService.deleteLocation(location)

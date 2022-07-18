@@ -15,6 +15,7 @@ import {
 import { PrivacyConfigurationDetailComponent } from '../privacy-configuration-detail/privacy-configuration-detail.component'
 import { PrivacyConfigurationOptionComponent } from './../privacy-configuration-options/privacy-configuration-options.component'
 import { PrivacyConfigurationHistoryComponent } from './../privacy-configuration-history/privacy-configuration-history.component'
+import { TranslateService } from '@ngx-translate/core'
 
 @Component({
   selector: 'privacy-configuration',
@@ -42,7 +43,8 @@ export class PrivacyConfigurationComponent {
     private locationManagementService: LocationManagementService,
     private modalController: ModalController,
     private popoverCtrl: PopoverController,
-    private routerOutlet: IonRouterOutlet
+    private routerOutlet: IonRouterOutlet,
+    private translateService: TranslateService
   ) {
     this.locationManagementService.locationOptions.subscribe(
       (newOptions: LocationOption[]) => {
@@ -118,10 +120,10 @@ export class PrivacyConfigurationComponent {
 
   async showLocationHistoryDetails() {
     await this.showDetails(
-      'location history title',
-      'location history subtitle',
-      'location history description',
-      'location history further description',
+      'simport-location-privacy-toolkit.location-history.title',
+      'simport-location-privacy-toolkit.location-history.subtitle',
+      'simport-location-privacy-toolkit.location-history.description',
+      'simport-location-privacy-toolkit.location-history.detailDescription',
       'hourglass-outline'
     )
   }
@@ -132,10 +134,10 @@ export class PrivacyConfigurationComponent {
     iconClass?: string
   ) {
     await this.showDetails(
-      `location-option.rating.${baseString}.title`,
-      `location-option.rating.${baseString}.subtitle`,
-      `location-option.rating.${baseString}.description`,
-      `location-option.rating.${baseString}.detailDescription`,
+      `simport-location-privacy-toolkit.location-option.rating.${baseString}.title`,
+      `simport-location-privacy-toolkit.location-option.rating.${baseString}.subtitle`,
+      `simport-location-privacy-toolkit.location-option.rating.${baseString}.description`,
+      `simport-location-privacy-toolkit.location-option.rating.${baseString}.detailDescription`,
       icon,
       iconClass
     )

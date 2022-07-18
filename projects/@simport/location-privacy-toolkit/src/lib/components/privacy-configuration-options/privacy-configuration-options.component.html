@@ -1,7 +1,9 @@
 <ion-content>
   <ion-list lines="full">
     <ion-item (click)="onExpertModeClick()">
-      <ion-label>{{ 'options.expertMode' | translate }}</ion-label>
+      <ion-label>{{
+        'simport-location-privacy-toolkit.options.expertMode' | translate
+      }}</ion-label>
       <ion-toggle
         [(ngModel)]="isExpertModeActive"
         (ngModelChange)="onExpertModeClick()"

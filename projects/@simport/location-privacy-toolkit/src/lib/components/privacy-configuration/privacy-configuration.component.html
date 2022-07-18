@@ -3,7 +3,9 @@
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
-    <ion-title> {{ 'general.title' | translate }} </ion-title>
+    <ion-title>
+      {{ 'simport-location-privacy-toolkit.general.title' | translate }}
+    </ion-title>
     <ion-icon
       slot="end"
       name="ellipsis-vertical"
@@ -14,12 +16,6 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">{{ 'general.title' | translate }}</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
   <div>
     <div class="rating-container">
       <ion-button
@@ -27,7 +23,10 @@
         fill="outline"
         (click)="onQualityRatingDetailsClick()"
         ><ion-label color="medium">
-          {{ 'location-option.rating.quality.shortTitle' | translate }}
+          {{
+            'simport-location-privacy-toolkit.location-option.rating.quality.shortTitle'
+              | translate
+          }}
           <br />
           <ion-icon
             *ngFor="let i of qualityLevelIcons.full"
@@ -55,7 +54,10 @@
         (click)="onPrivacyRatingDetailsClick()"
       >
         <ion-label color="medium" class="ion-text-wrap">
-          {{ 'location-option.rating.privacy.shortTitle' | translate }}
+          {{
+            'simport-location-privacy-toolkit.location-option.rating.privacy.shortTitle'
+              | translate
+          }}
           <br />
           <ion-icon
             *ngFor="let i of privacyLevelIcons.full"
@@ -141,7 +143,10 @@
         </ion-avatar>
         <ion-label>
           <h3>
-            {{ 'location-option.history.title' | translate }}
+            {{
+              'simport-location-privacy-toolkit.location-option.history.title'
+                | translate
+            }}
             <ion-icon
               id="help-icon"
               name="information-circle-outline"
@@ -149,7 +154,10 @@
             ></ion-icon>
           </h3>
           <p>
-            {{ 'location-option.history.subtitle' | translate }}
+            {{
+              'simport-location-privacy-toolkit.location-option.history.subtitle'
+                | translate
+            }}
           </p>
         </ion-label>
       </ion-item>
