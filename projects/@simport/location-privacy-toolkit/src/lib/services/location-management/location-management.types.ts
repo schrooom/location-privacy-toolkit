@@ -86,9 +86,6 @@ export enum LocationQualityLevel {
 
 export interface ILocationOptionType {
   id: string
-  title: string
-  subtitle: string
-  description: string
   dataType: LocationOptionDataType
   isExpertOption: boolean
 
@@ -96,10 +93,8 @@ export interface ILocationOptionType {
   compromisePreset: any
   serviceQualityPreset: any
 
-  optionDescription?: string
   icon?: string
   groupId?: string
   steps?: number[]
-  stepLabels?: string[]
   defaultValue?: any
 }

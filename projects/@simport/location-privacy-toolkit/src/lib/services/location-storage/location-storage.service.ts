@@ -11,7 +11,7 @@ export class LocationStorageService {
   async getAllLocations(): Promise<Position[]> {
     // TODO: return real data
     var locations: Position[] = []
-    for (let index = 0; index < 20; index++) {
+    for (let index = 0; index < 200; index++) {
       locations.push(this.generateRandomPosition())
     }
     return locations.sort((a, b) => a.timestamp - b.timestamp)

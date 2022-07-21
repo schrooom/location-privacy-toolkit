@@ -17,6 +17,19 @@
 <ion-content>
   <div class="map-wrapper">
     <div class="map" #map></div>
+    <ion-fab horizontal="end" vertical="top" slot="fixed">
+      <ion-fab-button size="small">
+        <ion-icon name="layers-outline"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-list>
+        <ion-fab-button
+          color="{{ isHeatmapActive.value ? 'dark' : 'light' }}"
+          (click)="isHeatmapActive.next(!isHeatmapActive.value)"
+        >
+          <ion-icon name="thermometer-outline"></ion-icon>
+        </ion-fab-button>
+      </ion-fab-list>
+    </ion-fab>
   </div>
   <div class="date-button-wrapper">
     <ion-button

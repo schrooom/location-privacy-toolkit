@@ -1,4 +1,4 @@
-import { Component } from '@angular/core'
+import { Component, OnInit } from '@angular/core'
 import {
   ILocationOptionType,
   LocationOption,
@@ -15,6 +15,8 @@ import {
 import { PrivacyConfigurationDetailComponent } from '../privacy-configuration-detail/privacy-configuration-detail.component'
 import { PrivacyConfigurationOptionComponent } from './../privacy-configuration-options/privacy-configuration-options.component'
 import { PrivacyConfigurationHistoryComponent } from './../privacy-configuration-history/privacy-configuration-history.component'
+import { LocationOptionUtility } from '../../services/location-management/location-management.definitions'
+import { translations } from '../../assets/i18n/i18n'
 import { TranslateService } from '@ngx-translate/core'
 
 @Component({
@@ -22,8 +24,11 @@ import { TranslateService } from '@ngx-translate/core'
   templateUrl: 'privacy-configuration.component.html',
   styleUrls: ['privacy-configuration.component.scss'],
 })
-export class PrivacyConfigurationComponent {
+export class PrivacyConfigurationComponent implements OnInit {
   private locationOptions: LocationOption[] = []
+
+  locationOptionTitle = LocationOptionUtility.getTitle
+  locationOptionSubtitle = LocationOptionUtility.getSubtitle
 
   get currentLocationOptions(): LocationOption[] {
     return this.locationOptions.filter(
@@ -40,17 +45,25 @@ export class PrivacyConfigurationComponent {
   }
 
   constructor(
+    private translateService: TranslateService,
     private locationManagementService: LocationManagementService,
     private modalController: ModalController,
     private popoverCtrl: PopoverController,
-    private routerOutlet: IonRouterOutlet,
-    private translateService: TranslateService
+    private routerOutlet: IonRouterOutlet
   ) {
     this.locationManagementService.locationOptions.subscribe(
       (newOptions: LocationOption[]) => {
         this.locationOptions = newOptions
       }
     )
+  }
+
+  ngOnInit(): void {
+    // merge translations into the root app
+    translations.forEach((t) => {
+      this.translateService.setTranslation(t.language, t.translations, true)
+    })
+    console.log('Toolkit ist created')
   }
 
   get privacyLevel(): LocationPrivacyLevel {
@@ -78,22 +91,25 @@ export class PrivacyConfigurationComponent {
   }
 
   getLocationOptionMinLabel(type: ILocationOptionType): string {
-    const labels = type.stepLabels ?? []
-    return labels.length > 0 ? labels[0] : ''
+    if (type.steps) {
+      return LocationOptionUtility.getStepLabel(type.id, 0)
+    }
+    return ''
   }
 
   getLocationOptionMaxLabel(type: ILocationOptionType): string {
-    const labels = type.stepLabels ?? []
-    return labels.length > 0 ? labels[labels.length - 1] : ''
+    if (type.steps) {
+      return LocationOptionUtility.getStepLabel(type.id, type.steps.length - 1)
+    }
+    return ''
   }
 
   getLocationOptionValueLabel(option: LocationOption): string {
     if (typeof option.value !== 'number') {
       return ''
     }
-    const labels = option.type.stepLabels ?? []
-    if (labels.length > option.value) {
-      return labels[option.value]
+    if (option.type.steps) {
+      return LocationOptionUtility.getStepLabel(option.type.id, option.value)
     }
     return ''
   }
@@ -102,7 +118,7 @@ export class PrivacyConfigurationComponent {
     const modal = await this.modalController.create({
       component: PrivacyConfigurationHistoryComponent,
       presentingElement: this.routerOutlet.nativeEl,
-      swipeToClose: true,
+      swipeToClose: false,
       cssClass: 'auto-height',
     })
     await modal.present()
@@ -110,10 +126,10 @@ export class PrivacyConfigurationComponent {
 
   async showLocationOptionDetails(type: ILocationOptionType) {
     await this.showDetails(
-      type.title,
-      type.subtitle,
-      type.description,
-      type.optionDescription,
+      LocationOptionUtility.getTitle(type.id),
+      LocationOptionUtility.getSubtitle(type.id),
+      LocationOptionUtility.getDescription(type.id),
+      LocationOptionUtility.getDetailDescription(type.id),
       type.icon
     )
   }

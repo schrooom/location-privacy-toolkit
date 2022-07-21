@@ -88,7 +88,7 @@
         </ion-avatar>
         <ion-label>
           <h3 (click)="showLocationOptionDetails(option.type)">
-            {{ option.type.title | translate }}
+            {{ locationOptionTitle(option.type.id) | translate }}
             <ion-icon
               id="help-icon"
               name="information-circle-outline"
@@ -98,10 +98,12 @@
               class="range-label-chip"
               color="primary"
             >
-              {{ getLocationOptionValueLabel(option) }}
+              {{ getLocationOptionValueLabel(option) | translate }}
             </ion-chip>
           </h3>
-          <p>{{ option.type.subtitle | translate }}</p>
+          <p>
+            {{ locationOptionSubtitle(option.type.id) | translate }}
+          </p>
           <ion-range
             *ngIf="option.type.dataType === 'number'"
             [min]="0"
@@ -118,14 +120,14 @@
             class="range-min-label"
             color="medium"
           >
-            {{ getLocationOptionMinLabel(option.type) }}
+            {{ getLocationOptionMinLabel(option.type) | translate }}
           </ion-label>
           <ion-label
             *ngIf="getLocationOptionMaxLabel(option.type).length"
             class="range-max-label"
             color="medium"
           >
-            {{ getLocationOptionMaxLabel(option.type) }}
+            {{ getLocationOptionMaxLabel(option.type) | translate }}
           </ion-label>
         </ion-label>
         <ion-toggle
