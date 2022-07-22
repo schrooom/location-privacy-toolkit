@@ -76,7 +76,7 @@ export class PrivacyConfigurationHistoryComponent
   ngAfterViewInit() {
     this.map = new maplibreGl.Map({
       container: this.mapContainer.nativeElement,
-      style: `TODO: include style`,
+      style: `https://demotiles.maplibre.org/style.json`,
       center: [0, 0],
       zoom: 0,
     })
@@ -173,11 +173,11 @@ export class PrivacyConfigurationHistoryComponent
             0,
             'rgba(33,102,172,0)',
             0.2,
-            'rgb(103,169,207)',
+            'rgba(103,169,207,0.75)',
             0.4,
             'rgb(209,229,240)',
             0.6,
-            'rgb(253,219,199)',
+            'rgb(253,219,140)',
             0.8,
             'rgb(239,138,98)',
             1,
@@ -189,8 +189,8 @@ export class PrivacyConfigurationHistoryComponent
           'heatmap-opacity': ['interpolate', ['linear'], ['zoom'], 7, 1, 9, 0],
         },
       })
-    } else if (this.map?.getLayer('locations-heatmap')) {
-      this.map?.removeLayer('locations-heatmap')
+    } else if (this.map?.getLayer(MapLayer.locationsHeatmap)) {
+      this.map?.removeLayer(MapLayer.locationsHeatmap)
     }
   }
 
