@@ -17,16 +17,25 @@
 <ion-content>
   <div class="map-wrapper">
     <div class="map" #map></div>
+    <div *ngIf="showDemoData.value" class="demo-data-banner">demo data</div>
     <ion-fab horizontal="end" vertical="top" slot="fixed">
       <ion-fab-button size="small">
         <ion-icon name="layers-outline"></ion-icon>
       </ion-fab-button>
       <ion-fab-list>
         <ion-fab-button
-          color="{{ isHeatmapActive.value ? 'dark' : 'light' }}"
-          (click)="isHeatmapActive.next(!isHeatmapActive.value)"
+          *ngFor="let mapModeKey of mapModeKeys()"
+          color="{{ mapMode.value === mapModeKey ? 'dark' : 'light' }}"
+          (click)="onMapModeChanged(mapModeKey)"
         >
-          <ion-icon name="thermometer-outline"></ion-icon>
+          <ion-icon name="{{ getIconForMapMode(mapModeKey) }}"></ion-icon>
+        </ion-fab-button>
+        <ion-fab-button
+          color="{{ showDemoData.value ? 'dark' : 'light' }}"
+          (click)="showDemoData.next(!showDemoData.value)"
+          attr.text="demo data"
+        >
+          <ion-icon name="flask-outline"></ion-icon>
         </ion-fab-button>
       </ion-fab-list>
     </ion-fab>

@@ -18,7 +18,14 @@ enum MapSource {
 
 enum MapLayer {
   locations = 'locations-layer',
+  locationsLine = 'locations-line-layer',
   locationsHeatmap = 'locations-heatmap-layer',
+}
+
+export enum MapMode {
+  dot = 'dot',
+  line = 'line',
+  heat = 'heat',
 }
 
 @Component({
@@ -37,9 +44,8 @@ export class PrivacyConfigurationHistoryComponent
 
   fromDate: Date = new Date()
   toDate: Date = new Date()
-  isHeatmapActive: BehaviorSubject<Boolean> = new BehaviorSubject<Boolean>(
-    false
-  )
+  mapMode: BehaviorSubject<MapMode> = new BehaviorSubject<MapMode>(MapMode.dot)
+  showDemoData: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false)
 
   currentLocations(): Position[] {
     const fromTimestamp =
@@ -88,8 +94,24 @@ export class PrivacyConfigurationHistoryComponent
     })
   }
 
+  private async loadLocations() {
+    this.locations = this.showDemoData.value
+      ? await this.locationStorageService.getRandomLocations()
+      : await this.locationStorageService.getAllLocations()
+    if (this.locations.length) {
+      this.fromDate = new Date(
+        Math.min(...this.locations.map((o) => o.timestamp))
+      )
+      this.toDate = new Date(
+        Math.max(...this.locations.map((o) => o.timestamp))
+      )
+    }
+  }
+
+  // map methods
+
   private updateLocationsOnMap() {
-    const pointFeatures: GeoJSON.Feature[] = this.currentLocations().map(
+    const locationFeatures: GeoJSON.Feature[] = this.currentLocations().map(
       (l) => {
         return {
           type: 'Feature',
@@ -101,9 +123,24 @@ export class PrivacyConfigurationHistoryComponent
         }
       }
     )
+    const pointCoordinates = locationFeatures.map(
+      (p) => (p.geometry as GeoJSON.Point).coordinates
+    )
+    const lineFeature: GeoJSON.Feature = {
+      type: 'Feature',
+      geometry: {
+        type: 'LineString',
+        coordinates: this.currentLocations().map((l) => [
+          l.coords.longitude,
+          l.coords.latitude,
+        ]),
+      },
+      properties: {},
+    }
+    locationFeatures.push(lineFeature)
     const locationData: GeoJSON.GeoJSON = {
       type: 'FeatureCollection',
-      features: pointFeatures,
+      features: locationFeatures,
     }
     const locationSource = this.map?.getSource(
       MapSource.locations
@@ -129,20 +166,37 @@ export class PrivacyConfigurationHistoryComponent
         filter: ['==', '$type', 'Point'],
       })
     }
-
-    const coords = pointFeatures.map(
-      (p) => (p.geometry as GeoJSON.Point).coordinates
-    )
-    this.fitBoundsTo(coords)
+    this.fitBoundsTo(pointCoordinates)
   }
 
-  private toggleHeatmap() {
-    if (this.isHeatmapActive.value) {
+  private updateMapMode() {
+    switch (this.mapMode.value) {
+      case MapMode.heat: {
+        this.toggleHeatMapLayer(true)
+        this.toggleLineMapLayer(false)
+        break
+      }
+      case MapMode.line: {
+        this.toggleHeatMapLayer(false)
+        this.toggleLineMapLayer(true)
+        break
+      }
+      default: {
+        this.toggleHeatMapLayer(false)
+        this.toggleLineMapLayer(false)
+        break
+      }
+    }
+  }
+
+  private toggleHeatMapLayer(showLayer: boolean) {
+    const hasHeatmapLayer = this.map?.getLayer(MapLayer.locationsHeatmap)
+    if (showLayer && !hasHeatmapLayer) {
       this.map?.addLayer({
         id: MapLayer.locationsHeatmap,
         type: 'heatmap',
         source: MapSource.locations,
-        maxzoom: 9,
+        maxzoom: 16,
         paint: {
           // Increase the heatmap weight based on frequency and property magnitude
           'heatmap-weight': [
@@ -151,18 +205,8 @@ export class PrivacyConfigurationHistoryComponent
             ['get', 'mag'],
             0,
             0,
-            6,
+            10,
             1,
-          ],
-          // Increase the heatmap color weight weight by zoom level, heatmap-intensity is a multiplier on top of heatmap-weight
-          'heatmap-intensity': [
-            'interpolate',
-            ['linear'],
-            ['zoom'],
-            0,
-            1,
-            9,
-            3,
           ],
           // Color ramp for heatmap.  Domain is 0 (low) to 1 (high).
           // Begin color ramp at 0-stop with a 0-transparancy color to create a blur-like effect.
@@ -171,11 +215,13 @@ export class PrivacyConfigurationHistoryComponent
             ['linear'],
             ['heatmap-density'],
             0,
-            'rgba(33,102,172,0)',
+            'rgba(33,102,172, 0)',
+            0.05,
+            'rgba(33,102,172, 0.25)',
             0.2,
-            'rgba(103,169,207,0.75)',
+            'rgba(103,169,207,0.5)',
             0.4,
-            'rgb(209,229,240)',
+            'rgba(209,229,240,0.75)',
             0.6,
             'rgb(253,219,140)',
             0.8,
@@ -183,14 +229,59 @@ export class PrivacyConfigurationHistoryComponent
             1,
             'rgb(178,24,43)',
           ],
+          // Increase the heatmap color weight weight by zoom level, heatmap-intensity is a multiplier on top of heatmap-weight
+          'heatmap-intensity': [
+            'interpolate',
+            ['linear'],
+            ['zoom'],
+            0,
+            1,
+            16,
+            2,
+          ],
           // Adjust the heatmap radius by zoom level
-          'heatmap-radius': ['interpolate', ['linear'], ['zoom'], 0, 2, 9, 20],
+          'heatmap-radius': ['interpolate', ['linear'], ['zoom'], 0, 2, 16, 30],
           // Transition from heatmap to circle layer by zoom level
-          'heatmap-opacity': ['interpolate', ['linear'], ['zoom'], 7, 1, 9, 0],
+          'heatmap-opacity': [
+            'interpolate',
+            ['linear'],
+            ['zoom'],
+            7,
+            1,
+            12,
+            1,
+            16,
+            0,
+          ],
         },
       })
-    } else if (this.map?.getLayer(MapLayer.locationsHeatmap)) {
+    } else if (!showLayer && hasHeatmapLayer) {
       this.map?.removeLayer(MapLayer.locationsHeatmap)
+    }
+  }
+
+  private toggleLineMapLayer(showLayer: boolean) {
+    const hasLineLayer = this.map?.getLayer(MapLayer.locationsLine)
+    if (showLayer && !hasLineLayer) {
+      this.map?.addLayer(
+        {
+          id: MapLayer.locationsLine,
+          type: 'line',
+          source: MapSource.locations,
+          layout: {
+            'line-cap': 'round',
+            'line-join': 'round',
+          },
+          paint: {
+            'line-color': '#944040',
+            'line-width': 2,
+          },
+          filter: ['in', '$type', 'LineString'],
+        },
+        MapLayer.locations
+      )
+    } else if (!showLayer && hasLineLayer) {
+      this.map?.removeLayer(MapLayer.locationsLine)
     }
   }
 
@@ -205,6 +296,8 @@ export class PrivacyConfigurationHistoryComponent
       })
     }
   }
+
+  // callbacks
 
   async onCloseClick() {
     await this.modalController.dismiss()
@@ -251,6 +344,33 @@ export class PrivacyConfigurationHistoryComponent
     if (typeof date == 'string') {
       this.toDate = new Date(date)
       this.updateLocationsOnMap()
+    }
+  }
+
+  onMapModeChanged(newMode: string) {
+    const newMapMode = newMode as keyof typeof MapMode
+    if (newMapMode) {
+      this.mapMode.next(MapMode[newMapMode])
+    }
+  }
+
+  // helpers
+
+  mapModeKeys(): Array<string> {
+    return Object.keys(MapMode)
+    //return keys.slice(keys.length / 2, keys.length - 1)
+  }
+
+  getIconForMapMode(mode: MapMode | string): string {
+    switch (mode) {
+      case MapMode.dot:
+        return 'map-outline'
+      case MapMode.heat:
+        return 'thermometer-outline'
+      case MapMode.line:
+        return 'analytics'
+      default:
+        return ''
     }
   }
 }

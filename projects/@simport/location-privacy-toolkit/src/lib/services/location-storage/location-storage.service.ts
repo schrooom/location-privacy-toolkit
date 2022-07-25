@@ -10,20 +10,16 @@ export class LocationStorageService {
 
   async getAllLocations(): Promise<Position[]> {
     // TODO: return real data
+    const locations: Position[] = []
+    return locations.sort((a, b) => a.timestamp - b.timestamp)
+  }
+
+  async getRandomLocations(): Promise<Position[]> {
     var locations: Position[] = []
     for (let index = 0; index < 200; index++) {
       locations.push(this.generateRandomPosition())
     }
     return locations.sort((a, b) => a.timestamp - b.timestamp)
-  }
-
-  async getLocations(fromDate: Date, toDate: Date): Promise<Position[]> {
-    // TODO: return real data
-    return [
-      this.generateRandomPosition(),
-      this.generateRandomPosition(),
-      this.generateRandomPosition(),
-    ]
   }
 
   async deleteLocation(location: Position) {
@@ -34,8 +30,8 @@ export class LocationStorageService {
     return {
       timestamp: Math.random() * Date.now(),
       coords: {
-        latitude: Math.random() * 2 + 51,
-        longitude: Math.random() * 2 + 7,
+        latitude: Math.random() * 0.1 + 51.9,
+        longitude: Math.random() * 0.2 + 7.5,
         accuracy: Math.random() * 100,
         altitudeAccuracy: Math.random() * 100,
         altitude: Math.random() * 100,
