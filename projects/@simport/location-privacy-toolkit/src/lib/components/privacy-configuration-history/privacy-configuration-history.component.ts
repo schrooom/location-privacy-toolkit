@@ -22,7 +22,7 @@ enum MapLayer {
   locationsHeatmap = 'locations-heatmap-layer',
 }
 
-export enum MapMode {
+enum MapMode {
   dot = 'dot',
   line = 'line',
   heat = 'heat',
@@ -38,26 +38,14 @@ export class PrivacyConfigurationHistoryComponent
 {
   @ViewChild('map')
   private mapContainer!: ElementRef<HTMLElement>
-
   private map: maplibreGl.Map | undefined
-  private locations: Position[] = []
 
-  fromDate: Date = new Date()
-  toDate: Date = new Date()
+  locations: Position[] = []
+  currentLocations: Position[] = []
+  fromDate: Date | undefined
+  toDate: Date | undefined
   mapMode: BehaviorSubject<MapMode> = new BehaviorSubject<MapMode>(MapMode.dot)
   showDemoData: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false)
-
-  currentLocations(): Position[] {
-    const fromTimestamp =
-      this.fromDate?.getTime() ??
-      Math.min(...this.locations.map((o) => o.timestamp))
-    const toTimestamp =
-      this.toDate?.getTime() ??
-      Math.max(...this.locations.map((o) => o.timestamp))
-    return this.locations.filter(
-      (l) => l.timestamp >= fromTimestamp && l.timestamp <= toTimestamp
-    )
-  }
 
   constructor(
     private locationStorageService: LocationStorageService,
@@ -67,16 +55,13 @@ export class PrivacyConfigurationHistoryComponent
   ) {}
 
   async ngOnInit() {
-    this.locations = await this.locationStorageService.getAllLocations()
-    if (this.locations.length) {
-      this.fromDate = new Date(
-        Math.min(...this.locations.map((o) => o.timestamp))
-      )
-      this.toDate = new Date(
-        Math.max(...this.locations.map((o) => o.timestamp))
-      )
-    }
-    this.isHeatmapActive.subscribe(() => this.toggleHeatmap())
+    await this.loadLocations()
+
+    this.mapMode.subscribe(() => this.updateMapMode())
+    this.showDemoData.subscribe(async () => {
+      await this.loadLocations()
+      this.updateLocationsOnMap()
+    })
   }
 
   ngAfterViewInit() {
@@ -88,7 +73,7 @@ export class PrivacyConfigurationHistoryComponent
     })
     this.map?.on('load', () => {
       this.map?.resize()
-      if (this.currentLocations().length) {
+      if (this.currentLocations.length) {
         this.updateLocationsOnMap()
       }
     })
@@ -99,19 +84,30 @@ export class PrivacyConfigurationHistoryComponent
       ? await this.locationStorageService.getRandomLocations()
       : await this.locationStorageService.getAllLocations()
     if (this.locations.length) {
-      this.fromDate = new Date(
+      const newFromDate = new Date(
         Math.min(...this.locations.map((o) => o.timestamp))
       )
-      this.toDate = new Date(
+      const newToDate = new Date(
         Math.max(...this.locations.map((o) => o.timestamp))
       )
+      this.currentLocations = this.locations.filter(
+        (l) =>
+          l.timestamp >= newFromDate.getTime() &&
+          l.timestamp <= newToDate.getTime()
+      )
+      this.fromDate = newFromDate
+      this.toDate = newToDate
+    } else {
+      this.currentLocations = []
+      this.fromDate = undefined
+      this.toDate = undefined
     }
   }
 
   // map methods
 
   private updateLocationsOnMap() {
-    const locationFeatures: GeoJSON.Feature[] = this.currentLocations().map(
+    const locationFeatures: GeoJSON.Feature[] = this.currentLocations.map(
       (l) => {
         return {
           type: 'Feature',
@@ -130,7 +126,7 @@ export class PrivacyConfigurationHistoryComponent
       type: 'Feature',
       geometry: {
         type: 'LineString',
-        coordinates: this.currentLocations().map((l) => [
+        coordinates: this.currentLocations.map((l) => [
           l.coords.longitude,
           l.coords.latitude,
         ]),

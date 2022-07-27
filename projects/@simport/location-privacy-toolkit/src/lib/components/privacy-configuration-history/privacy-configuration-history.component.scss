@@ -26,15 +26,35 @@
   background-color: #b72200;
   color: #fff;
   text-align: center;
+  overflow: hidden;
+}
+
+.no-locations-div {
+  height: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  ion-icon {
+    margin-bottom: 1em;
+    text-align: center;
+    vertical-align: middle;
+  }
+}
+
+ion-content {
+  overflow: hidden;
 }
 
 ion-list {
-  height: 50%;
   overflow: auto;
 }
 
 ion-popover {
   min-width: 50vw;
+}
+
+.locations-list-wrapper {
+  height: 50%;
 }
 
 .date-button-wrapper {

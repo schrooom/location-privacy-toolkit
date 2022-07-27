@@ -40,58 +40,68 @@
       </ion-fab-list>
     </ion-fab>
   </div>
-  <div class="date-button-wrapper">
-    <ion-button
-      class="date-picker-button"
-      id="from-date-trigger"
-      color="medium"
-    >
-      <ion-icon
-        name="calendar-clear-outline"
-        slot="start"
-        size="small"
-      ></ion-icon>
-      <p no-margin>
-        {{ fromDate | date: 'shortDate' }}
-      </p>
-    </ion-button>
-    <ion-button class="date-picker-button" id="to-date-trigger" color="medium">
-      <p no-margin>
-        {{ toDate | date: 'shortDate' }}
-      </p>
-      <ion-icon name="calendar-outline" slot="end" size="small"></ion-icon>
-    </ion-button>
+  <div *ngIf="currentLocations.length === 0" class="no-locations-div">
+    <ion-icon name="file-tray-outline" size="large" color="medium"></ion-icon>
+    <br />
+    <ion-text color="medium">no locations</ion-text>
   </div>
-  <ion-list>
-    <ion-item *ngFor="let location of currentLocations()">
-      <ion-label>
-        <h3>
-          {{ location.coords.latitude.toFixed(3) }} /
-          {{ location.coords.longitude.toFixed(3) }}
-        </h3>
-        <p>
-          {{ location.timestamp | date: 'medium' }}
-        </p>
-      </ion-label>
-      <ion-label slot="end">
-        <p>{{ location.coords.accuracy.toFixed(0) }}m</p>
-      </ion-label>
+  <div *ngIf="locations.length > 0" class="locations-list-wrapper">
+    <div *ngIf="locations.length > 0" class="date-button-wrapper">
       <ion-button
-        slot="end"
-        fill="clear"
-        (click)="onDeleteLocationClick(location)"
+        class="date-picker-button"
+        id="from-date-trigger"
+        color="medium"
       >
         <ion-icon
-          slot="icon-only"
-          color="danger"
-          name="trash-outline"
+          name="calendar-clear-outline"
+          slot="start"
+          size="small"
         ></ion-icon>
+        <p *ngIf="fromDate" no-margin>{{ fromDate | date: 'shortDate' }}</p>
+        <p *ngIf="!fromDate" no-margin>–</p>
       </ion-button>
-    </ion-item>
-  </ion-list>
+      <ion-button
+        class="date-picker-button"
+        id="to-date-trigger"
+        color="medium"
+      >
+        <p *ngIf="toDate" no-margin>{{ toDate | date: 'shortDate' }}</p>
+        <p *ngIf="!toDate" no-margin>–</p>
+        <ion-icon name="calendar-outline" slot="end" size="small"></ion-icon>
+      </ion-button>
+    </div>
+    <ion-list *ngIf="currentLocations.length > 0">
+      <ion-item *ngFor="let location of currentLocations">
+        <ion-label>
+          <h3>
+            {{ location.coords.latitude.toFixed(3) }} /
+            {{ location.coords.longitude.toFixed(3) }}
+          </h3>
+          <p>
+            {{ location.timestamp | date: 'medium' }}
+          </p>
+        </ion-label>
+        <ion-label slot="end">
+          <p>{{ location.coords.accuracy.toFixed(0) }}m</p>
+        </ion-label>
+        <ion-button
+          slot="end"
+          fill="clear"
+          (click)="onDeleteLocationClick(location)"
+        >
+          <ion-icon
+            slot="icon-only"
+            color="danger"
+            name="trash-outline"
+          ></ion-icon>
+        </ion-button>
+      </ion-item>
+    </ion-list>
+  </div>
   <ion-popover trigger="from-date-trigger" size="auto">
     <ng-template>
       <ion-datetime
+        *ngIf="fromDate"
         #fromDatePicker
         presentation="date"
         showDefaultButtons="true"
@@ -103,6 +113,7 @@
   <ion-popover trigger="to-date-trigger" size="auto">
     <ng-template>
       <ion-datetime
+        *ngIf="toDate"
         #toDatePicker
         presentation="date"
         showDefaultButtons="true"
