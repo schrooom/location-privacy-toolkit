@@ -75,6 +75,11 @@ export class PrivacyConfigurationHistoryComponent
       this.map?.resize()
       if (this.currentLocations.length) {
         this.updateLocationsOnMap()
+      } else {
+        this.map?.flyTo({
+          center: [0, 0],
+          zoom: 0,
+        })
       }
     })
   }
@@ -163,6 +168,7 @@ export class PrivacyConfigurationHistoryComponent
       })
     }
     this.fitBoundsTo(pointCoordinates)
+    this.updateMapMode()
   }
 
   private updateMapMode() {

@@ -1,5 +1,20 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
+  <ion-toolbar *ngIf="showDemoData.value" color="danger">
+    <ion-label slot="start" color="light" class="demo-label">demo</ion-label>
+    <ion-title color="light">
+      {{
+        'simport-location-privacy-toolkit.location-history.title' | translate
+      }}
+    </ion-title>
+    <ion-icon
+      id="close-icon"
+      name="close"
+      slot="end"
+      color="light"
+      (click)="onCloseClick()"
+    ></ion-icon>
+  </ion-toolbar>
+  <ion-toolbar *ngIf="!showDemoData.value">
     <ion-title>
       {{
         'simport-location-privacy-toolkit.location-history.title' | translate
@@ -17,7 +32,6 @@
 <ion-content>
   <div class="map-wrapper">
     <div class="map" #map></div>
-    <div *ngIf="showDemoData.value" class="demo-data-banner">demo data</div>
     <ion-fab horizontal="end" vertical="top" slot="fixed">
       <ion-fab-button size="small">
         <ion-icon name="layers-outline"></ion-icon>
@@ -31,7 +45,7 @@
           <ion-icon name="{{ getIconForMapMode(mapModeKey) }}"></ion-icon>
         </ion-fab-button>
         <ion-fab-button
-          color="{{ showDemoData.value ? 'dark' : 'light' }}"
+          color="{{ showDemoData.value ? 'danger' : 'light' }}"
           (click)="showDemoData.next(!showDemoData.value)"
           attr.text="demo data"
         >
@@ -41,9 +55,11 @@
     </ion-fab>
   </div>
   <div *ngIf="currentLocations.length === 0" class="no-locations-div">
-    <ion-icon name="file-tray-outline" size="large" color="medium"></ion-icon>
-    <br />
-    <ion-text color="medium">no locations</ion-text>
+    <p>
+      <ion-icon name="file-tray-outline" size="large" color="medium"></ion-icon>
+      <br />
+      <ion-label color="medium">no locations</ion-label>
+    </p>
   </div>
   <div *ngIf="locations.length > 0" class="locations-list-wrapper">
     <div *ngIf="locations.length > 0" class="date-button-wrapper">
@@ -98,7 +114,7 @@
       </ion-item>
     </ion-list>
   </div>
-  <ion-popover trigger="from-date-trigger" size="auto">
+  <ion-popover trigger="from-date-trigger" triggerAction="click" size="auto">
     <ng-template>
       <ion-datetime
         *ngIf="fromDate"
@@ -110,7 +126,7 @@
       ></ion-datetime>
     </ng-template>
   </ion-popover>
-  <ion-popover trigger="to-date-trigger" size="auto">
+  <ion-popover trigger="to-date-trigger" triggerAction="click" size="auto">
     <ng-template>
       <ion-datetime
         *ngIf="toDate"

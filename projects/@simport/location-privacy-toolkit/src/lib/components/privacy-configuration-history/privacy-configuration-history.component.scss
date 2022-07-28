@@ -18,15 +18,13 @@
   }
 }
 
-.demo-data-banner {
-  position: absolute;
-  top: 0;
-  width: 100%;
-  padding: 0.5em;
-  background-color: #b72200;
-  color: #fff;
-  text-align: center;
-  overflow: hidden;
+.demo-label {
+  padding: 0.25em;
+  border-width: thin;
+  border-style: solid;
+  border-radius: 8px;
+  border-color: #fff;
+  font-size: small;
 }
 
 .no-locations-div {
@@ -34,10 +32,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  ion-icon {
-    margin-bottom: 1em;
+  p {
     text-align: center;
-    vertical-align: middle;
   }
 }
 

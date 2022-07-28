@@ -117,7 +117,6 @@ export class PrivacyConfigurationComponent implements OnInit {
   async showLocationHistory() {
     const modal = await this.modalController.create({
       component: PrivacyConfigurationHistoryComponent,
-      presentingElement: this.routerOutlet.nativeEl,
       swipeToClose: false,
       cssClass: 'auto-height',
     })
