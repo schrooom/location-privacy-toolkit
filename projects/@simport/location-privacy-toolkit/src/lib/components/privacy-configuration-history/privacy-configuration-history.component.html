@@ -1,9 +1,14 @@
 <ion-header [translucent]="true">
   <ion-toolbar *ngIf="showDemoData.value" color="danger">
-    <ion-label slot="start" color="light" class="demo-label">demo</ion-label>
+    <ion-label slot="start" color="light" class="demo-label">
+      {{
+        'simportLocationPrivacyToolkit.locationOption.history.demoDataTitle'
+          | translate
+      }}</ion-label
+    >
     <ion-title color="light">
       {{
-        'simport-location-privacy-toolkit.location-history.title' | translate
+        'simportLocationPrivacyToolkit.locationOption.history.title' | translate
       }}
     </ion-title>
     <ion-icon
@@ -17,7 +22,7 @@
   <ion-toolbar *ngIf="!showDemoData.value">
     <ion-title>
       {{
-        'simport-location-privacy-toolkit.location-history.title' | translate
+        'simportLocationPrivacyToolkit.locationOption.history.title' | translate
       }}
     </ion-title>
     <ion-icon

@@ -80,7 +80,7 @@ export const LocationSimpleOptionType: ILocationOptionType = {
 }
 
 export class LocationOptionUtility {
-  private static prefix = 'simport-location-privacy-toolkit.location-option.'
+  private static prefix = 'simportLocationPrivacyToolkit.locationOption.'
 
   static getTitle(identifier: LocationOptionTypeIdentifier | string) {
     return LocationOptionUtility.getString(identifier, 'title')

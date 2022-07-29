@@ -3,7 +3,7 @@ import { Translation } from './i18n'
 export const en: Translation = {
   language: 'en',
   translations: {
-    'simport-location-privacy-toolkit': {
+    simportLocationPrivacyToolkit: {
       general: {
         title: 'Location privacy',
         delete: 'Delete',
@@ -15,7 +15,7 @@ export const en: Translation = {
           expert: 'expert mode',
         },
       },
-      'location-option': {
+      locationOption: {
         simple: {
           title: 'service quality',
           subtitle: 'lorem ipsum …',
@@ -84,7 +84,10 @@ export const en: Translation = {
         history: {
           title: 'location history',
           subtitle: 'manage your locations',
+          description: 'lorem ipsum …',
+          detailDescription: '',
           deleteDialogTitle: 'Are you sure to delete this location?',
+          demoDataTitle: 'demo',
         },
       },
     },

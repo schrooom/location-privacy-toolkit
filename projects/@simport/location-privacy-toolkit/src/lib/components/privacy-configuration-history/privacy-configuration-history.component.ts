@@ -308,17 +308,17 @@ export class PrivacyConfigurationHistoryComponent
   async onDeleteLocationClick(location: Position) {
     const alert = await this.alertController.create({
       header: this.translateService.instant(
-        'simport-location-privacy-toolkit.location-history.deleteDialogTitle'
+        'simportLocationPrivacyToolkit.locationOption.history.deleteDialogTitle'
       ),
       buttons: [
         {
           text: this.translateService.instant(
-            'simport-location-privacy-toolkit.general.cancel'
+            'simportLocationPrivacyToolkit.general.cancel'
           ),
         },
         {
           text: this.translateService.instant(
-            'simport-location-privacy-toolkit.general.delete'
+            'simportLocationPrivacyToolkit.general.delete'
           ),
           role: 'destructive',
           handler: () => {

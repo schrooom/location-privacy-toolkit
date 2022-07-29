@@ -135,10 +135,10 @@ export class PrivacyConfigurationComponent implements OnInit {
 
   async showLocationHistoryDetails() {
     await this.showDetails(
-      'simport-location-privacy-toolkit.location-history.title',
-      'simport-location-privacy-toolkit.location-history.subtitle',
-      'simport-location-privacy-toolkit.location-history.description',
-      'simport-location-privacy-toolkit.location-history.detailDescription',
+      'simportLocationPrivacyToolkit.locationOption.history.title',
+      'simportLocationPrivacyToolkit.locationOption.history.subtitle',
+      'simportLocationPrivacyToolkit.locationOption.history.description',
+      'simportLocationPrivacyToolkit.locationOption.history.detailDescription',
       'hourglass-outline'
     )
   }
@@ -149,10 +149,10 @@ export class PrivacyConfigurationComponent implements OnInit {
     iconClass?: string
   ) {
     await this.showDetails(
-      `simport-location-privacy-toolkit.location-option.rating.${baseString}.title`,
-      `simport-location-privacy-toolkit.location-option.rating.${baseString}.subtitle`,
-      `simport-location-privacy-toolkit.location-option.rating.${baseString}.description`,
-      `simport-location-privacy-toolkit.location-option.rating.${baseString}.detailDescription`,
+      `simportLocationPrivacyToolkit.locationOption.rating.${baseString}.title`,
+      `simportLocationPrivacyToolkit.locationOption.rating.${baseString}.subtitle`,
+      `simportLocationPrivacyToolkit.locationOption.rating.${baseString}.description`,
+      `simportLocationPrivacyToolkit.locationOption.rating.${baseString}.detailDescription`,
       icon,
       iconClass
     )
