@@ -13,15 +13,60 @@ Location Privacy Toolkit, that can be included into Angular and Ionic based mobi
 ## Contents
 
 - ### [Library Usage](#library-usage)
+  - [Architecture](#architecture)
+  - [API](#api)
+  - [Example](#example)
 - ### [License](#license)
 
 ## Library Usage
 
-tbd
+### API
+
+The accessible API of the Location Privacy Toolkit is basically given by the following two elements.
+
+#### Location Service
+
+The `Location Service` provides the app with the usual interfaces to request location data. First and foremost it reveals access to the actual location data in two ways: A simple method for a one-time location data request.
+```
+getCurrentLocation(): Promise<Position | undefined>
+```
+and also request for continuous location updates by registering a simple listener including the ability to unregister it later on.
+```
+registerListener(callback: (location: Position | undefined) => void)
+removeListener()
+```
+
+Additionally the `Location Service` provides the following helper methods for the access-status and request of location data.
+```
+canUseLocation(requestPermission: Boolean = false): Promise<Boolean>
+needsLocationAccessRequest(): Promise<Boolean>
+requestLocationAccess(): Promise<Boolean>
+```
+
+#### Location Configuration Component
+
+The `Location Privacy Configuration Component` is a central component, that ultimately controls the output of the `Location Service`. This component is designed to be presented to the users of location based services. They can use it to define when, how and which location data is shared with the service.
+
+
+Currently users have the following option to manipulate which and how location data is shared with the underlying location based service. Each location privacy option is complemented by a detailed info-view, which educates users about the impact each setting potentially makes to the behaviour of the `Locaiton Service`.
+| Location Privacy Option        |    Options                   |
+| ------------------------------ | :--------------------------: |
+| One-time location requests     | Allow / Disallow             | 
+| Continuous location requests   | Allow / Disallow             | 
+| Accuracy                       | 0 / 100 / 500 / 1,000 meters |
+| Interval                       | 0 / 1 / 10 / 30 minutes      | 
+
+_Screenshots of this component will follow soon._
+
+### Architecture
 
 <p align="center">
-  <img src="resources/architecture.PNG" width="75%">
+  <img src="resources/architecture.png" width="85%">
 </p>
+
+### Example
+
+In course of the project a sample app was created: [The Playground-Finder][playground-finder] is a simple app, that helps users to find playgrounds in their area. That app makes use of this Location Privacy Toolkit and can be seen as an example on how to integrate it.
 
 ## License
 
@@ -41,3 +86,4 @@ Copyright (c) 2022 Sitcom Lab
 [vscode]: https://code.visualstudio.com
 [vscode-prettier]: https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode
 [git]: https://git-scm.com
+[playground-finder]: https://github.com/schrooom/playground-finder
