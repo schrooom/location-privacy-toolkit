@@ -64,6 +64,13 @@ _Screenshots of this component will follow soon._
   <img src="resources/architecture.png" width="85%">
 </p>
 
+The architecture used in this `Location Privacy Toolkit` is inspired by the following work of Mehrnaz Ataei: [_Location Data Privacy : Principles to Practice_](https://doi.org/10.6035/14123.2018.783210).
+
+
+<p align="center">
+  <img src="resources/architecture-draft.png" width="60%">
+</p>
+
 ### Example
 
 In course of the project a sample app was created: [The Playground-Finder][playground-finder] is a simple app, that helps users to find playgrounds in their area. That app makes use of this Location Privacy Toolkit and can be seen as an example on how to integrate it.
