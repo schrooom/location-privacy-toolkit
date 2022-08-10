@@ -56,15 +56,12 @@ export class PrivacyConfigurationComponent implements OnInit {
         this.locationOptions = newOptions
       }
     )
-  }
-
-  ngOnInit(): void {
-    // merge translations into the root app
     translations.forEach((t) => {
       this.translateService.setTranslation(t.language, t.translations, true)
     })
-    console.log('Toolkit ist created')
   }
+
+  ngOnInit() {}
 
   get privacyLevel(): LocationPrivacyLevel {
     return LocationOption.combinedPrivacyLevel(this.locationOptions)

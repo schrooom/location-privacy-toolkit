@@ -86,7 +86,7 @@ export class PrivacyConfigurationHistoryComponent
 
   private async loadLocations() {
     this.locations = this.showDemoData.value
-      ? await this.locationStorageService.getRandomLocations()
+      ? await this.locationStorageService.getExampleLocations()
       : await this.locationStorageService.getAllLocations()
     if (this.locations.length) {
       const newFromDate = new Date(
@@ -155,39 +155,49 @@ export class PrivacyConfigurationHistoryComponent
       })
     }
 
-    if (!this.map?.getLayer(MapLayer.locations)) {
-      this.map?.addLayer({
-        id: MapLayer.locations,
-        type: 'circle',
-        source: MapSource.locations,
-        paint: {
-          'circle-radius': 6,
-          'circle-color': '#B42222',
-        },
-        filter: ['==', '$type', 'Point'],
-      })
-    }
     this.fitBoundsTo(pointCoordinates)
     this.updateMapMode()
   }
 
   private updateMapMode() {
+    if (!this.map?.loaded) return
     switch (this.mapMode.value) {
       case MapMode.heat: {
+        this.togglePointsLayer(false)
         this.toggleHeatMapLayer(true)
         this.toggleLineMapLayer(false)
         break
       }
       case MapMode.line: {
+        this.togglePointsLayer(false)
         this.toggleHeatMapLayer(false)
         this.toggleLineMapLayer(true)
         break
       }
       default: {
+        this.togglePointsLayer(true)
         this.toggleHeatMapLayer(false)
         this.toggleLineMapLayer(false)
         break
       }
+    }
+  }
+
+  private togglePointsLayer(showLayer: boolean) {
+    const hasPointsLayer = this.map?.getLayer(MapLayer.locations)
+    if (showLayer && !hasPointsLayer) {
+      this.map?.addLayer({
+        id: MapLayer.locations,
+        type: 'circle',
+        source: MapSource.locations,
+        paint: {
+          'circle-radius': 3,
+          'circle-color': '#B42222',
+        },
+        filter: ['==', '$type', 'Point'],
+      })
+    } else if (!showLayer && hasPointsLayer) {
+      this.map?.removeLayer(MapLayer.locations)
     }
   }
 
@@ -198,7 +208,7 @@ export class PrivacyConfigurationHistoryComponent
         id: MapLayer.locationsHeatmap,
         type: 'heatmap',
         source: MapSource.locations,
-        maxzoom: 16,
+        maxzoom: 20,
         paint: {
           // Increase the heatmap weight based on frequency and property magnitude
           'heatmap-weight': [
@@ -207,7 +217,7 @@ export class PrivacyConfigurationHistoryComponent
             ['get', 'mag'],
             0,
             0,
-            10,
+            0.01,
             1,
           ],
           // Color ramp for heatmap.  Domain is 0 (low) to 1 (high).
@@ -225,36 +235,16 @@ export class PrivacyConfigurationHistoryComponent
             0.4,
             'rgba(209,229,240,0.75)',
             0.6,
-            'rgb(253,219,140)',
+            'rgba(250,231,105,0.85)',
             0.8,
-            'rgb(239,138,98)',
+            'rgba(240,159,79,0.9)',
+            0.9,
+            'rgba(227,108,34,0.9)',
             1,
             'rgb(178,24,43)',
           ],
-          // Increase the heatmap color weight weight by zoom level, heatmap-intensity is a multiplier on top of heatmap-weight
-          'heatmap-intensity': [
-            'interpolate',
-            ['linear'],
-            ['zoom'],
-            0,
-            1,
-            16,
-            2,
-          ],
           // Adjust the heatmap radius by zoom level
-          'heatmap-radius': ['interpolate', ['linear'], ['zoom'], 0, 2, 16, 30],
-          // Transition from heatmap to circle layer by zoom level
-          'heatmap-opacity': [
-            'interpolate',
-            ['linear'],
-            ['zoom'],
-            7,
-            1,
-            12,
-            1,
-            16,
-            0,
-          ],
+          'heatmap-radius': ['interpolate', ['linear'], ['zoom'], 0, 2, 20, 10],
         },
       })
     } else if (!showLayer && hasHeatmapLayer) {
@@ -265,23 +255,20 @@ export class PrivacyConfigurationHistoryComponent
   private toggleLineMapLayer(showLayer: boolean) {
     const hasLineLayer = this.map?.getLayer(MapLayer.locationsLine)
     if (showLayer && !hasLineLayer) {
-      this.map?.addLayer(
-        {
-          id: MapLayer.locationsLine,
-          type: 'line',
-          source: MapSource.locations,
-          layout: {
-            'line-cap': 'round',
-            'line-join': 'round',
-          },
-          paint: {
-            'line-color': '#944040',
-            'line-width': 2,
-          },
-          filter: ['in', '$type', 'LineString'],
+      this.map?.addLayer({
+        id: MapLayer.locationsLine,
+        type: 'line',
+        source: MapSource.locations,
+        layout: {
+          'line-cap': 'round',
+          'line-join': 'round',
         },
-        MapLayer.locations
-      )
+        paint: {
+          'line-color': '#944040',
+          'line-width': 2,
+        },
+        filter: ['in', '$type', 'LineString'],
+      })
     } else if (!showLayer && hasLineLayer) {
       this.map?.removeLayer(MapLayer.locationsLine)
     }

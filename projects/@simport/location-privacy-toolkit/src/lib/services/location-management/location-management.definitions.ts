@@ -44,6 +44,18 @@ export const LocationPunctualAccessOptionType: ILocationOptionType = {
   serviceQualityPreset: true,
 }
 
+export const LocationAutoDeleteOptionType: ILocationOptionType = {
+  id: LocationOptionTypeIdentifier.autoRemoval,
+  dataType: LocationOptionDataType.number,
+  icon: 'trash-outline',
+  isExpertOption: true,
+  steps: [1800, 600, 60, 0],
+  defaultValue: 0,
+  privacyPreset: 0,
+  compromisePreset: 2,
+  serviceQualityPreset: 3,
+}
+
 export const LocationAccuracyOptionType: ILocationOptionType = {
   id: LocationOptionTypeIdentifier.accuracy,
   dataType: LocationOptionDataType.number,

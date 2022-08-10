@@ -1,22 +1,26 @@
 {
   "name": "@simport/location-privacy-toolkit",
-  "version": "0.0.6",
+  "version": "0.0.4",
   "peerDependencies": {
     "@angular/common": "~13.0.0",
     "@angular/core": "~13.0.0",
+    "@capacitor-community/sqlite": "^3.5.1",
     "@capacitor/geolocation": "^1.3.1",
     "@capacitor/storage": "^1.2.5",
     "@ionic/angular": "^6.0.0",
+    "@mapbox/polyline": "^1.1.1",
     "@ngx-translate/core": "^14.0.0",
     "@ngx-translate/http-loader": "^7.0.0",
     "@turf/bbox": "^6.5.0",
     "@turf/buffer": "^6.5.0",
     "@turf/helpers": "^6.5.0",
     "@turf/turf": "^6.5.0",
-    "maplibre-gl": "^2.1.9",
-    "@capacitor-community/sqlite": "^3.5.1"
+    "maplibre-gl": "^2.1.9"
   },
   "dependencies": {
     "tslib": "^2.1.0"
+  },
+  "devDependencies": {
+    "@types/mapbox__polyline": "^1.0.2"
   }
 }

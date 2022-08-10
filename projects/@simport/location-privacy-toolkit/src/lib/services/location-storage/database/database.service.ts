@@ -34,7 +34,7 @@ export class DatabaseService {
     // TODO: if (this.platform.is('android')) await CapacitorSQLite.requestPermissions()
     this.sqliteConnection = new SQLiteConnection(this.sqlite)
     this.db = await this.sqliteConnection.createConnection(
-      'trajectories',
+      'locations',
       false,
       'no-encryption',
       1

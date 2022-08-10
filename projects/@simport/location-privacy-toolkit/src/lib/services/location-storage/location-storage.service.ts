@@ -1,6 +1,11 @@
 import { Injectable } from '@angular/core'
 import { Position } from '@capacitor/geolocation'
 import { DatabaseService } from './database/database.service'
+import {
+  ExampleJSON,
+  exampleLocations,
+} from './location-storage.service.fixtures'
+import * as polyline from '@mapbox/polyline'
 
 @Injectable({
   providedIn: 'root',
@@ -14,11 +19,14 @@ export class LocationStorageService {
     return locations.sort((a, b) => a.timestamp - b.timestamp)
   }
 
-  async getRandomLocations(): Promise<Position[]> {
+  async getExampleLocations(): Promise<Position[]> {
+    /*
     var locations: Position[] = []
     for (let index = 0; index < 200; index++) {
       locations.push(this.generateRandomPosition())
     }
+    */
+    var locations = this.loadPositionFromExampleJSON(exampleLocations)
     return locations.sort((a, b) => a.timestamp - b.timestamp)
   }
 
@@ -39,5 +47,45 @@ export class LocationStorageService {
         heading: Math.random() * 360,
       },
     }
+  }
+
+  private loadPositionFromExampleJSON({
+    coordinates,
+    timestamps,
+    accuracy,
+    speed,
+    time0,
+  }: ExampleJSON): Position[] {
+    const c = polyline.decode(coordinates) as [number, number][]
+    const t = timestamps.reduce<number[]>((ts, t, i, deltas) => {
+      // The array from the JSON has one element less than locations,
+      // as it contains time deltas. To restore absolute dates, we add
+      // the first timestamp & in the same iteration also add the first delta
+      if (i === 0) ts.push(new Date(time0).getTime())
+      const t1 = ts[i]
+      const deltaMs = deltas[i] * 1000
+      ts.push(t1 + deltaMs)
+      return ts
+    }, [])
+    const a = accuracy || []
+    if (c.length === t.length && t.length === a.length) {
+      return c.reduce<Position[]>((positions, c, i, ar) => {
+        const pos: Position = {
+          coords: {
+            latitude: c[0],
+            longitude: c[1],
+            accuracy: a[i],
+            altitude: null,
+            altitudeAccuracy: null,
+            speed: null,
+            heading: null,
+          },
+          timestamp: t[i],
+        }
+        positions.push(pos)
+        return positions
+      }, [])
+    }
+    return []
   }
 }
