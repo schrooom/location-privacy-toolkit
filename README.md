@@ -27,17 +27,17 @@ The accessible API of the Location Privacy Toolkit is basically given by the fol
 #### Location Service
 
 The `Location Service` provides the app with the usual interfaces to request location data. First and foremost it reveals access to the actual location data in two ways: A simple method for a one-time location data request.
-```
+```ts
 getCurrentLocation(): Promise<Position | undefined>
 ```
 and also request for continuous location updates by registering a simple listener including the ability to unregister it later on.
-```
+```ts
 registerListener(callback: (location: Position | undefined) => void)
 removeListener()
 ```
 
 Additionally the `Location Service` provides the following helper methods for the access-status and request of location data.
-```
+```ts
 canUseLocation(requestPermission: Boolean = false): Promise<Boolean>
 needsLocationAccessRequest(): Promise<Boolean>
 requestLocationAccess(): Promise<Boolean>
@@ -62,6 +62,13 @@ _Screenshots of this component will follow soon._
 
 <p align="center">
   <img src="resources/architecture.png" width="85%">
+</p>
+
+The architecture used in this `Location Privacy Toolkit` is inspired by the following work of Mehrnaz Ataei: [_Location Data Privacy : Principles to Practice_](https://doi.org/10.6035/14123.2018.783210).
+
+
+<p align="center">
+  <img src="resources/architecture-draft.png" width="60%">
 </p>
 
 ### Example
