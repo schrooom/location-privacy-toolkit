@@ -56,7 +56,12 @@ Currently users have the following option to manipulate which and how location d
 | Accuracy                       | 0 / 100 / 500 / 1,000 meters |
 | Interval                       | 0 / 1 / 10 / 30 minutes      | 
 
-_Screenshots of this component will follow soon._
+
+<p align="center">
+  <img src="resources/playgrounds_toolkit_overview.png" width="25%">
+  <img src="resources/playground_toolkit_details.png" width="25%">
+  <img src="resources/playgrounds_toolkit_heatmap.png" width="25%">
+</p>
 
 ### Architecture
 
