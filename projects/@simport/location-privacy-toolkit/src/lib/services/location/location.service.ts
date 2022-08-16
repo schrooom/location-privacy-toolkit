@@ -98,7 +98,7 @@ export class LocationService {
     return undefined
   }
 
-  async registerListener(callback: (location: Position) => void) {
+  async registerListener(callback: (location: Position | undefined) => void) {
     const locationOption =
       await this.locationManagementService.loadLocationOption(
         LocationOptionTypeIdentifier.continuousAccess
