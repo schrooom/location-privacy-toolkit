@@ -35,6 +35,7 @@
 </ion-header>
 
 <ion-content>
+  <!-- map -->
   <div class="map-wrapper">
     <div class="map" #map></div>
     <ion-fab horizontal="end" vertical="top" slot="fixed">
@@ -59,13 +60,22 @@
       </ion-fab-list>
     </ion-fab>
   </div>
+
+  <!-- no locations message -->
   <div *ngIf="currentLocations.length === 0" class="no-locations-div">
     <p>
       <ion-icon name="file-tray-outline" size="large" color="medium"></ion-icon>
       <br />
-      <ion-label color="medium">no locations</ion-label>
+      <ion-label color="medium">
+        {{
+          'simportLocationPrivacyToolkit.locationOption.history.noLocationsMessage'
+            | translate
+        }}
+      </ion-label>
     </p>
   </div>
+
+  <!-- locations list -->
   <div *ngIf="locations.length > 0" class="locations-list-wrapper">
     <div *ngIf="locations.length > 0" class="date-button-wrapper">
       <ion-button
@@ -90,7 +100,48 @@
         <p *ngIf="!toDate" no-margin>–</p>
         <ion-icon name="calendar-outline" slot="end" size="small"></ion-icon>
       </ion-button>
+
+      <!-- datetime modals-->
+      <ion-modal
+        id="date-modal"
+        trigger="from-date-trigger"
+        triggerAction="click"
+        [swipeToClose]="false"
+      >
+        <ng-template>
+          <ion-datetime
+            *ngIf="fromDate && minDate && toDate"
+            #fromDatePicker
+            presentation="date"
+            showDefaultButtons="true"
+            [value]="fromDate.toISOString()"
+            [min]="minDate.toISOString()"
+            [max]="toDate.toISOString()"
+            (ionChange)="onFromDateChanged(fromDatePicker.value)"
+          ></ion-datetime>
+        </ng-template>
+      </ion-modal>
+      <ion-modal
+        id="date-modal"
+        trigger="to-date-trigger"
+        triggerAction="click"
+        [swipeToClose]="false"
+      >
+        <ng-template>
+          <ion-datetime
+            *ngIf="toDate && fromDate && maxDate"
+            #toDatePicker
+            presentation="date"
+            showDefaultButtons="true"
+            [value]="toDate.toISOString()"
+            [min]="fromDate.toISOString()"
+            [max]="maxDate.toISOString()"
+            (ionChange)="onToDateChanged(toDatePicker.value)"
+          ></ion-datetime>
+        </ng-template>
+      </ion-modal>
     </div>
+
     <ion-list *ngIf="lazyLoadedLocations.length > 0">
       <ion-item *ngFor="let location of lazyLoadedLocations">
         <ion-label>
@@ -124,29 +175,4 @@
       </ion-infinite-scroll-content>
     </ion-infinite-scroll>
   </div>
-
-  <ion-popover trigger="from-date-trigger" triggerAction="click" size="auto">
-    <ng-template>
-      <ion-datetime
-        *ngIf="fromDate"
-        #fromDatePicker
-        presentation="date"
-        showDefaultButtons="true"
-        [value]="fromDate.toISOString()"
-        (ionChange)="onFromDateChanged(fromDatePicker.value)"
-      ></ion-datetime>
-    </ng-template>
-  </ion-popover>
-  <ion-popover trigger="to-date-trigger" triggerAction="click" size="auto">
-    <ng-template>
-      <ion-datetime
-        *ngIf="toDate"
-        #toDatePicker
-        presentation="date"
-        showDefaultButtons="true"
-        [value]="toDate.toISOString()"
-        (ionChange)="onToDateChanged(toDatePicker.value)"
-      ></ion-datetime>
-    </ng-template>
-  </ion-popover>
 </ion-content>

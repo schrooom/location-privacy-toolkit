@@ -53,6 +53,8 @@ export class PrivacyConfigurationHistoryComponent
   currentLocations: Position[] = []
   fromDate: Date | undefined
   toDate: Date | undefined
+  minDate: Date | undefined
+  maxDate: Date | undefined
   mapMode: BehaviorSubject<MapMode> = new BehaviorSubject<MapMode>(MapMode.dot)
   showDemoData: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false)
 
@@ -106,8 +108,6 @@ export class PrivacyConfigurationHistoryComponent
 
     loading.dismiss()
 
-    this.lazyLoadedLocations = []
-    this.lazyLoadedPage = 0
     if (this.locations.length) {
       const newFromDate = new Date(
         Math.min(...this.locations.map((o) => o.timestamp))
@@ -115,19 +115,34 @@ export class PrivacyConfigurationHistoryComponent
       const newToDate = new Date(
         Math.max(...this.locations.map((o) => o.timestamp))
       )
-      this.currentLocations = this.locations.filter(
-        (l) =>
-          l.timestamp >= newFromDate.getTime() &&
-          l.timestamp <= newToDate.getTime()
-      )
       this.fromDate = newFromDate
+      this.minDate = newFromDate
       this.toDate = newToDate
-      this.lazyLoadLocations()
+      this.maxDate = newToDate
+      this.loadCurrentLocations()
     } else {
       this.currentLocations = []
       this.fromDate = undefined
       this.toDate = undefined
     }
+    this.resetLazyLoadedLocations()
+  }
+
+  private loadCurrentLocations() {
+    const minDate = this.fromDate
+    const maxDate = this.toDate
+    if (minDate && maxDate) {
+      this.currentLocations = this.locations.filter(
+        (l) =>
+          l.timestamp >= minDate.getTime() && l.timestamp <= maxDate.getTime()
+      )
+    }
+  }
+
+  private resetLazyLoadedLocations() {
+    this.lazyLoadedLocations = []
+    this.lazyLoadedPage = 0
+    this.lazyLoadLocations()
   }
 
   private lazyLoadLocations() {
@@ -363,17 +378,21 @@ export class PrivacyConfigurationHistoryComponent
     await alert.present()
   }
 
-  onFromDateChanged(date: any) {
+  async onFromDateChanged(date: any) {
     if (typeof date == 'string') {
       this.fromDate = new Date(date)
+      this.loadCurrentLocations()
       this.updateLocationsOnMap()
+      this.resetLazyLoadedLocations()
     }
   }
 
-  onToDateChanged(date: any) {
+  async onToDateChanged(date: any) {
     if (typeof date == 'string') {
       this.toDate = new Date(date)
+      this.loadCurrentLocations()
       this.updateLocationsOnMap()
+      this.resetLazyLoadedLocations()
     }
   }
 
@@ -388,7 +407,6 @@ export class PrivacyConfigurationHistoryComponent
 
   mapModeKeys(): Array<string> {
     return Object.keys(MapMode)
-    //return keys.slice(keys.length / 2, keys.length - 1)
   }
 
   getIconForMapMode(mode: MapMode | string): string {
