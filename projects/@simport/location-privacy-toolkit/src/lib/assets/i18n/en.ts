@@ -88,6 +88,7 @@ export const en: Translation = {
           detailDescription: '',
           deleteDialogTitle: 'Are you sure to delete this location?',
           demoDataTitle: 'demo',
+          loadingLocationsTitle: 'Loading locations …',
         },
       },
     },

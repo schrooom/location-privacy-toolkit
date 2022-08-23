@@ -91,8 +91,8 @@
         <ion-icon name="calendar-outline" slot="end" size="small"></ion-icon>
       </ion-button>
     </div>
-    <ion-list *ngIf="currentLocations.length > 0">
-      <ion-item *ngFor="let location of currentLocations">
+    <ion-list *ngIf="lazyLoadedLocations.length > 0">
+      <ion-item *ngFor="let location of lazyLoadedLocations">
         <ion-label>
           <h3>
             {{ location.coords.latitude.toFixed(3) }} /
@@ -118,7 +118,13 @@
         </ion-button>
       </ion-item>
     </ion-list>
+
+    <ion-infinite-scroll (ionInfinite)="onLoadLocationListChunk($event)">
+      <ion-infinite-scroll-content loadingSpinner="lines">
+      </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
   </div>
+
   <ion-popover trigger="from-date-trigger" triggerAction="click" size="auto">
     <ng-template>
       <ion-datetime

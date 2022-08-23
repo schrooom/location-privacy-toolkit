@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
 import { Position } from '@capacitor/geolocation'
-import { DatabaseService } from './database/database.service'
+import { DatabaseService, PositionType } from './database/database.service'
 import {
   ExampleJSON,
   exampleLocations,
@@ -20,33 +20,22 @@ export class LocationStorageService {
   }
 
   async getExampleLocations(): Promise<Position[]> {
-    /*
-    var locations: Position[] = []
-    for (let index = 0; index < 200; index++) {
-      locations.push(this.generateRandomPosition())
+    var locations = await this.databaseService.getLocations(
+      PositionType.EXAMPLE
+    )
+    if (locations.length == 0) {
+      locations = this.loadPositionFromExampleJSON(exampleLocations)
+      await this.databaseService.insertLocations(
+        locations,
+        PositionType.EXAMPLE
+      )
     }
-    */
-    var locations = this.loadPositionFromExampleJSON(exampleLocations)
+
     return locations.sort((a, b) => a.timestamp - b.timestamp)
   }
 
   async deleteLocation(location: Position) {
-    // TODO: delete location
-  }
-
-  private generateRandomPosition(): Position {
-    return {
-      timestamp: Math.random() * Date.now(),
-      coords: {
-        latitude: Math.random() * 0.1 + 51.9,
-        longitude: Math.random() * 0.2 + 7.5,
-        accuracy: Math.random() * 100,
-        altitudeAccuracy: Math.random() * 100,
-        altitude: Math.random() * 100,
-        speed: Math.random() * 100,
-        heading: Math.random() * 360,
-      },
-    }
+    this.databaseService.deleteLocation(location)
   }
 
   private loadPositionFromExampleJSON({
@@ -68,16 +57,17 @@ export class LocationStorageService {
       return ts
     }, [])
     const a = accuracy || []
+    const s = speed || []
     if (c.length === t.length && t.length === a.length) {
-      return c.reduce<Position[]>((positions, c, i, ar) => {
+      return c.reduce<Position[]>((positions, c, i, _) => {
         const pos: Position = {
           coords: {
             latitude: c[0],
             longitude: c[1],
-            accuracy: a[i],
+            accuracy: a.length > i ? a[i] : -1,
             altitude: null,
             altitudeAccuracy: null,
-            speed: null,
+            speed: s.length > i ? s[i] : null,
             heading: null,
           },
           timestamp: t[i],

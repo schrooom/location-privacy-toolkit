@@ -49,11 +49,15 @@ export const MIGRATIONS = [
 
   // initial schema: locations table
   `CREATE TABLE IF NOT EXISTS locations (
-    uuid varchar(255) NOT NULL PRIMARY KEY,
     time DATETIME NOT NULL,
     lat float NOT NULL,
     lon float NOT NULL,
     accuracy float,
     altitude float,
-    name varchar(255);`,
+    altitudeAccuracy float,
+    heading float,
+    speed float,
+    name TEXT,
+    type type TEXT CHECK(type IN ("record", "example")) NOT NULL DEFAULT "record",
+    PRIMARY KEY (lat, lon, time));`,
 ]

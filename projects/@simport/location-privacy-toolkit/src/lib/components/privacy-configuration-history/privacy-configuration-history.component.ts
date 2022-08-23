@@ -6,7 +6,11 @@ import {
   ViewChild,
 } from '@angular/core'
 import { Position } from '@capacitor/geolocation'
-import { AlertController, ModalController } from '@ionic/angular'
+import {
+  AlertController,
+  LoadingController,
+  ModalController,
+} from '@ionic/angular'
 import { LocationStorageService } from '../../services/location-storage/location-storage.service'
 import * as maplibreGl from 'maplibre-gl'
 import { TranslateService } from '@ngx-translate/core'
@@ -40,6 +44,11 @@ export class PrivacyConfigurationHistoryComponent
   private mapContainer!: ElementRef<HTMLElement>
   private map: maplibreGl.Map | undefined
 
+  // lazy loaded list
+  private static LIST_CHUNK_SIZE = 20
+  lazyLoadedLocations: Position[] = []
+  private lazyLoadedPage = 0
+
   locations: Position[] = []
   currentLocations: Position[] = []
   fromDate: Date | undefined
@@ -51,12 +60,11 @@ export class PrivacyConfigurationHistoryComponent
     private locationStorageService: LocationStorageService,
     private modalController: ModalController,
     private alertController: AlertController,
+    private loadingController: LoadingController,
     private translateService: TranslateService
   ) {}
 
   async ngOnInit() {
-    await this.loadLocations()
-
     this.mapMode.subscribe(() => this.updateMapMode())
     this.showDemoData.subscribe(async () => {
       await this.loadLocations()
@@ -85,9 +93,21 @@ export class PrivacyConfigurationHistoryComponent
   }
 
   private async loadLocations() {
+    const loading = await this.loadingController.create({
+      message: this.translateService.instant(
+        'simportLocationPrivacyToolkit.locationOption.history.loadingLocationsTitle'
+      ),
+    })
+    loading.present()
+
     this.locations = this.showDemoData.value
       ? await this.locationStorageService.getExampleLocations()
       : await this.locationStorageService.getAllLocations()
+
+    loading.dismiss()
+
+    this.lazyLoadedLocations = []
+    this.lazyLoadedPage = 0
     if (this.locations.length) {
       const newFromDate = new Date(
         Math.min(...this.locations.map((o) => o.timestamp))
@@ -102,10 +122,23 @@ export class PrivacyConfigurationHistoryComponent
       )
       this.fromDate = newFromDate
       this.toDate = newToDate
+      this.lazyLoadLocations()
     } else {
       this.currentLocations = []
       this.fromDate = undefined
       this.toDate = undefined
+    }
+  }
+
+  private lazyLoadLocations() {
+    const startIndex =
+      this.lazyLoadedPage * PrivacyConfigurationHistoryComponent.LIST_CHUNK_SIZE
+    const endIndex =
+      startIndex + PrivacyConfigurationHistoryComponent.LIST_CHUNK_SIZE
+    if (startIndex < this.currentLocations.length) {
+      const locationsChunk = this.currentLocations.slice(startIndex, endIndex)
+      this.lazyLoadedLocations.push(...locationsChunk)
+      this.lazyLoadedPage += 1
     }
   }
 
@@ -288,6 +321,11 @@ export class PrivacyConfigurationHistoryComponent
 
   // callbacks
 
+  onLoadLocationListChunk(event: any) {
+    this.lazyLoadLocations()
+    event.target.complete()
+  }
+
   async onCloseClick() {
     await this.modalController.dismiss()
   }
@@ -309,7 +347,10 @@ export class PrivacyConfigurationHistoryComponent
           ),
           role: 'destructive',
           handler: () => {
-            this.locationStorageService.deleteLocation(location)
+            if (!this.showDemoData.value) {
+              // only remove real location data from storage
+              this.locationStorageService.deleteLocation(location)
+            }
             const index = this.locations.indexOf(location, 0)
             if (index > -1) {
               this.locations.splice(index, 1)
