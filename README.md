@@ -46,9 +46,11 @@ requestLocationAccess(): Promise<Boolean>
 #### Location Configuration Component
 
 The `Location Privacy Configuration Component` is a central component, that ultimately controls the output of the `Location Service`. This component is designed to be presented to the users of location based services. They can use it to define when, how and which location data is shared with the service.
+In order to address various kinds of users, the `Location Privacy Configuration Component` comes in two modes: a `Expert Mode` and a `Simple Mode`.
 
+##### Expert Mode
+Using the expert mode users have a wide set of options at their hands to be able to manipulate which and how location data is shared with the underlying location based service. Each location privacy option is complemented by a detailed info-view, which educates users about the impact each setting potentially makes to the behaviour of the `Location Service`.
 
-Currently users have the following option to manipulate which and how location data is shared with the underlying location based service. Each location privacy option is complemented by a detailed info-view, which educates users about the impact each setting potentially makes to the behaviour of the `Locaiton Service`.
 | Location Privacy Option        |    Options                   |
 | ------------------------------ | :--------------------------: |
 | One-time location requests     | Allow / Disallow             | 
@@ -56,6 +58,18 @@ Currently users have the following option to manipulate which and how location d
 | Accuracy                       | 0 / 100 / 500 / 1,000 meters |
 | Interval                       | 0 / 1 / 10 / 30 minutes      | 
 
+##### Simple Mode
+Using the simple mode users have a simple slider at hand that is used to control the `Location Privacy Configuration Component`. This form of interaction comes with 3 presets to use:
+
+| Location Privacy Option        |    Effect                   |
+| ------------------------------ | :--------------------------: |
+| Privacy focus                  | Maximum privacy setting at the expense of service quality | 
+| Balanced                       | Balance between privacy and service quality  | 
+| Service focus                  | Maximum service quality at the expense of privacy |
+
+##### Location History
+
+Furthermore a location history view provides the user with the ability to view their location data on a map. Using various visualisations users can explore and comprehend the location data recorded about themselves.
 
 <p align="center">
   <img src="resources/playgrounds_toolkit_overview.png" width="25%">
