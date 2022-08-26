@@ -2,7 +2,7 @@
 
 </br>
 
-[![](resources/simport_bmbf_logo.png)](https://simport.net/)
+[![](https://github.com/schrooom/location-privacy-toolkit/blob/main/resources/simport_bmbf_logo.png)](https://simport.net/)
 
 ---
 
@@ -72,22 +72,21 @@ Using the simple mode users have a simple slider at hand that is used to control
 Furthermore a location history view provides the user with the ability to view their location data on a map. Using various visualisations users can explore and comprehend the location data recorded about themselves.
 
 <p align="center">
-  <img src="resources/playgrounds_toolkit_overview.png" width="25%">
-  <img src="resources/playground_toolkit_details.png" width="25%">
-  <img src="resources/playgrounds_toolkit_heatmap.png" width="25%">
+  <img src="https://github.com/schrooom/location-privacy-toolkit/blob/main/resources/playgrounds_toolkit_overview.png" width="25%">
+  <img src="https://github.com/schrooom/location-privacy-toolkit/blob/main/resources/playground_toolkit_details.png" width="25%">
+  <img src="https://github.com/schrooom/location-privacy-toolkit/blob/main/resources/playgrounds_toolkit_heatmap.png" width="25%">
 </p>
 
 ### Architecture
 
 <p align="center">
-  <img src="resources/architecture.png" width="85%">
+  <img src="https://github.com/schrooom/location-privacy-toolkit/blob/main/resources/architecture.png" width="85%">
 </p>
 
 The architecture used in this `Location Privacy Toolkit` is inspired by the following work of Mehrnaz Ataei: [_Location Data Privacy : Principles to Practice_](https://doi.org/10.6035/14123.2018.783210).
 
-
 <p align="center">
-  <img src="resources/architecture-draft.png" width="60%">
+  <img src="https://github.com/schrooom/location-privacy-toolkit/blob/main/resources/architecture-draft.png" width="60%">
 </p>
 
 ### Example
