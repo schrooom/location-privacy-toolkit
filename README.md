@@ -96,7 +96,7 @@ In course of the project a sample app was created: [The Playground-Finder][playg
 ## License
 
 ```
-SIMPORT Learning App
+SIMPORT Location Privacy Toolkit
 Copyright (c) 2022 Sitcom Lab
 ```
 
