@@ -17,7 +17,7 @@ export const en: Translation = {
       },
       locationOption: {
         simple: {
-          title: 'service quality',
+          title: 'Service quality',
           subtitle: 'lorem ipsum …',
           description: 'lorem ipsum …',
           detailDescription: 'lorem ipsum …',
@@ -82,14 +82,20 @@ export const en: Translation = {
           },
         },
         history: {
-          title: 'location history',
-          subtitle: 'manage your locations',
+          title: 'Location history',
+          subtitle: 'Manage your locations',
           description: 'lorem ipsum …',
-          detailDescription: '',
+          detailDescription: 'lorem ipsum …',
           deleteDialogTitle: 'Are you sure to delete this location?',
           demoDataTitle: 'demo',
           noLocationsMessage: 'There are no locations in your history.',
           loadingLocationsTitle: 'Loading locations …',
+        },
+        sharing: {
+          title: 'Location sharing',
+          subtitle: 'With whom to share your location data?',
+          description: 'lorem ipsum …',
+          detailDescription: 'lorem ipsum …',
         },
       },
     },

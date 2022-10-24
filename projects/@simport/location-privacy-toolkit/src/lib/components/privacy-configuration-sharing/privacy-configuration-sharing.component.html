@@ -1,0 +1,147 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      {{
+        'simportLocationPrivacyToolkit.locationOption.sharing.title' | translate
+      }}
+    </ion-title>
+    <ion-icon
+      id="close-icon"
+      name="close"
+      slot="end"
+      (click)="onCloseClick()"
+    ></ion-icon>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <p class="ion-padding">
+    <ion-text color="dark">
+      Choose with whom and for what purpose you want to share your location
+      data.
+    </ion-text>
+  </p>
+  <ion-accordion-group>
+    <ion-accordion value="first" toggleIconSlot="start">
+      <ion-item slot="header" color="light">
+        <ion-label>functional (core)</ion-label>
+        <ion-checkbox
+          slot="end"
+          [(ngModel)]="coreFunctionalGroupChecked"
+          [indeterminate]="coreFunctionalGroupChecked.value == undefined"
+          (click)="preventEventPropagation($event)"
+        ></ion-checkbox>
+      </ion-item>
+      <div class="ion-padding" slot="content">
+        <ion-list>
+          <ion-item>
+            <ion-label>core functional service A</ion-label>
+            <ion-checkbox
+              slot="end"
+              [(ngModel)]="coreFunctionalAChecked"
+            ></ion-checkbox>
+          </ion-item>
+          <ion-item>
+            <ion-label>core functional service B</ion-label>
+            <ion-checkbox
+              slot="end"
+              [(ngModel)]="coreFunctionalBChecked"
+            ></ion-checkbox>
+          </ion-item>
+        </ion-list>
+      </div>
+    </ion-accordion>
+    <ion-accordion value="second" toggleIconSlot="start">
+      <ion-item slot="header" color="light">
+        <ion-label>functional</ion-label>
+        <ion-checkbox
+          slot="end"
+          [(ngModel)]="functionalGroupChecked"
+          [indeterminate]="functionalGroupChecked.value == undefined"
+          (click)="preventEventPropagation($event)"
+        ></ion-checkbox>
+      </ion-item>
+      <div class="ion-padding" slot="content">
+        <ion-list>
+          <ion-item>
+            <ion-label>functional service A</ion-label>
+            <ion-checkbox slot="end"></ion-checkbox>
+          </ion-item>
+          <ion-item>
+            <ion-label>functional service B</ion-label>
+            <ion-checkbox slot="end"></ion-checkbox>
+          </ion-item>
+        </ion-list>
+      </div>
+    </ion-accordion>
+    <ion-accordion value="third" toggleIconSlot="start">
+      <ion-item slot="header" color="light">
+        <ion-label>analytics</ion-label>
+        <ion-checkbox
+          slot="end"
+          [(ngModel)]="analyticsGroupChecked"
+          [indeterminate]="analyticsGroupChecked.value == undefined"
+          (click)="preventEventPropagation($event)"
+        ></ion-checkbox>
+      </ion-item>
+      <div class="ion-padding" slot="content">
+        <ion-list>
+          <ion-item>
+            <ion-label>analytics service A</ion-label>
+            <ion-checkbox slot="end"></ion-checkbox>
+          </ion-item>
+          <ion-item>
+            <ion-label>analytics service B</ion-label>
+            <ion-checkbox slot="end"></ion-checkbox>
+          </ion-item>
+        </ion-list>
+      </div>
+    </ion-accordion>
+    <ion-accordion value="fourth" toggleIconSlot="start">
+      <ion-item slot="header" color="light">
+        <ion-label>ads</ion-label>
+        <ion-checkbox
+          slot="end"
+          [(ngModel)]="adsGroupChecked"
+          [indeterminate]="adsGroupChecked.value == undefined"
+          (click)="preventEventPropagation($event)"
+        ></ion-checkbox>
+      </ion-item>
+      <div class="ion-padding" slot="content">
+        <ion-list>
+          <ion-item>
+            <ion-label>ads service A</ion-label>
+            <ion-checkbox slot="end"></ion-checkbox>
+          </ion-item>
+          <ion-item>
+            <ion-label>ads service B</ion-label>
+            <ion-checkbox slot="end"></ion-checkbox>
+          </ion-item>
+        </ion-list>
+      </div>
+    </ion-accordion>
+    <ion-accordion value="fifth" toggleIconSlot="start">
+      <ion-item slot="header" color="light">
+        <ion-label>other</ion-label>
+        <ion-checkbox
+          slot="end"
+          [(ngModel)]="otherGroupChecked"
+          [indeterminate]="otherGroupChecked.value == undefined"
+          (click)="preventEventPropagation($event)"
+        ></ion-checkbox>
+      </ion-item>
+      <div class="ion-padding" slot="content">
+        <ion-list>
+          <ion-item>
+            <ion-label>other service A</ion-label>
+            <ion-checkbox slot="end"></ion-checkbox>
+          </ion-item>
+          <ion-item>
+            <ion-label>other service B</ion-label>
+            <ion-checkbox slot="end"></ion-checkbox>
+          </ion-item>
+        </ion-list>
+      </div>
+    </ion-accordion>
+  </ion-accordion-group>
+</ion-content>

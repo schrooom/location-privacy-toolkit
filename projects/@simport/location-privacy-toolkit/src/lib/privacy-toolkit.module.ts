@@ -9,6 +9,7 @@ import { IonicModule } from '@ionic/angular'
 import { PrivacyConfigurationOptionComponent } from './components/privacy-configuration-options/privacy-configuration-options.component'
 import { PrivacyConfigurationHistoryComponent } from './components/privacy-configuration-history/privacy-configuration-history.component'
 import { TranslateHttpLoader } from '@ngx-translate/http-loader'
+import { PrivacyConfigurationSharingComponent } from './components/privacy-configuration-sharing/privacy-configuration-sharing.component'
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http)
@@ -20,6 +21,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     PrivacyConfigurationDetailComponent,
     PrivacyConfigurationOptionComponent,
     PrivacyConfigurationHistoryComponent,
+    PrivacyConfigurationSharingComponent,
   ],
   imports: [
     IonicModule,

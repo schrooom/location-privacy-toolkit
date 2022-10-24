@@ -21,7 +21,7 @@
       <ion-button
         class="rating-item"
         fill="outline"
-        (click)="onQualityRatingDetailsClick()"
+        (click)="showQualityRatingDetails()"
         ><ion-label color="medium">
           {{
             'simportLocationPrivacyToolkit.locationOption.rating.quality.shortTitle'
@@ -51,7 +51,7 @@
       <ion-button
         class="rating-item"
         fill="outline"
-        (click)="onPrivacyRatingDetailsClick()"
+        (click)="showPrivacyRatingDetails()"
       >
         <ion-label color="medium" class="ion-text-wrap">
           {{
@@ -87,7 +87,7 @@
           <ion-icon [name]="option.type.icon"></ion-icon>
         </ion-avatar>
         <ion-label>
-          <h3 (click)="showLocationOptionDetails(option.type)">
+          <h3 (click)="showLocationOptionDetails($event, option.type)">
             {{ locationOptionTitle(option.type.id) | translate }}
             <ion-icon
               id="help-icon"
@@ -139,6 +139,35 @@
 
       <ion-item-divider></ion-item-divider>
 
+      <ion-item
+        detail="true"
+        (click)="showLocationSharing()"
+        *ngIf="showLocationSharingOption"
+      >
+        <ion-avatar slot="start">
+          <ion-icon name="share-outline"></ion-icon>
+        </ion-avatar>
+        <ion-label>
+          <h3>
+            {{
+              'simportLocationPrivacyToolkit.locationOption.sharing.title'
+                | translate
+            }}
+            <ion-icon
+              id="help-icon"
+              name="information-circle-outline"
+              (click)="showLocationSharingDetails($event)"
+            ></ion-icon>
+          </h3>
+          <p>
+            {{
+              'simportLocationPrivacyToolkit.locationOption.sharing.subtitle'
+                | translate
+            }}
+          </p>
+        </ion-label>
+      </ion-item>
+
       <ion-item detail="true" (click)="showLocationHistory()">
         <ion-avatar slot="start">
           <ion-icon name="hourglass-outline"></ion-icon>
@@ -152,7 +181,7 @@
             <ion-icon
               id="help-icon"
               name="information-circle-outline"
-              (click)="showLocationHistoryDetails()"
+              (click)="showLocationHistoryDetails($event)"
             ></ion-icon>
           </h3>
           <p>

@@ -18,6 +18,7 @@ import { PrivacyConfigurationHistoryComponent } from './../privacy-configuration
 import { LocationOptionUtility } from '../../services/location-management/location-management.definitions'
 import { translations } from '../../assets/i18n/i18n'
 import { TranslateService } from '@ngx-translate/core'
+import { PrivacyConfigurationSharingComponent } from '../privacy-configuration-sharing/privacy-configuration-sharing.component'
 
 @Component({
   selector: 'privacy-configuration',
@@ -26,6 +27,8 @@ import { TranslateService } from '@ngx-translate/core'
 })
 export class PrivacyConfigurationComponent implements OnInit {
   private locationOptions: LocationOption[] = []
+
+  showLocationSharingOption = false
 
   locationOptionTitle = LocationOptionUtility.getTitle
   locationOptionSubtitle = LocationOptionUtility.getSubtitle
@@ -120,59 +123,49 @@ export class PrivacyConfigurationComponent implements OnInit {
     await modal.present()
   }
 
-  async showLocationOptionDetails(type: ILocationOptionType) {
-    await this.showDetails(
-      LocationOptionUtility.getTitle(type.id),
-      LocationOptionUtility.getSubtitle(type.id),
-      LocationOptionUtility.getDescription(type.id),
-      LocationOptionUtility.getDetailDescription(type.id),
-      type.icon
-    )
+  async showLocationSharing() {
+    const modal = await this.modalController.create({
+      component: PrivacyConfigurationSharingComponent,
+      swipeToClose: false,
+      cssClass: 'auto-height',
+    })
+    await modal.present()
   }
 
-  async showLocationHistoryDetails() {
-    await this.showDetails(
-      'simportLocationPrivacyToolkit.locationOption.history.title',
-      'simportLocationPrivacyToolkit.locationOption.history.subtitle',
-      'simportLocationPrivacyToolkit.locationOption.history.description',
-      'simportLocationPrivacyToolkit.locationOption.history.detailDescription',
-      'hourglass-outline'
-    )
+  async showLocationOptionDetails(event: Event, type: ILocationOptionType) {
+    event.stopPropagation()
+    await this.showDetails(type.id, type.icon)
   }
 
-  private async showRatingDetails(
-    baseString: string,
-    icon: string,
-    iconClass?: string
-  ) {
-    await this.showDetails(
-      `simportLocationPrivacyToolkit.locationOption.rating.${baseString}.title`,
-      `simportLocationPrivacyToolkit.locationOption.rating.${baseString}.subtitle`,
-      `simportLocationPrivacyToolkit.locationOption.rating.${baseString}.description`,
-      `simportLocationPrivacyToolkit.locationOption.rating.${baseString}.detailDescription`,
-      icon,
-      iconClass
-    )
+  async showLocationHistoryDetails(event: Event) {
+    event.stopPropagation()
+    await this.showDetails('history', 'hourglass-outline')
   }
 
-  private async showDetails(
-    title: string,
-    subtitle: string,
-    description: string,
-    detailDescription?: string,
-    icon?: string,
-    iconClass?: string
-  ) {
+  async showLocationSharingDetails(event: Event) {
+    event.stopPropagation()
+    await this.showDetails('sharing', 'share-outline')
+  }
+
+  async showPrivacyRatingDetails() {
+    await this.showDetails('privacy', 'shield')
+  }
+
+  async showQualityRatingDetails() {
+    await this.showDetails('quality', 'star')
+  }
+
+  private async showDetails(id: string, icon?: string, iconClass?: string) {
     const modal = await this.modalController.create({
       component: PrivacyConfigurationDetailComponent,
       presentingElement: this.routerOutlet.nativeEl,
       swipeToClose: true,
       cssClass: 'auto-height',
       componentProps: {
-        title,
-        subtitle,
-        description,
-        detailDescription,
+        title: LocationOptionUtility.getTitle(id),
+        subtitle: LocationOptionUtility.getSubtitle(id),
+        description: LocationOptionUtility.getDescription(id),
+        detailDescription: LocationOptionUtility.getDetailDescription(id),
         icon,
         iconClass,
       },
@@ -205,14 +198,6 @@ export class PrivacyConfigurationComponent implements OnInit {
       this.locationOptions = newOptions
     }
     this.locationManagementService.locationOptions.next(this.locationOptions)
-  }
-
-  async onPrivacyRatingDetailsClick() {
-    await this.showRatingDetails('privacy', 'shield')
-  }
-
-  async onQualityRatingDetailsClick() {
-    await this.showRatingDetails('quality', 'star')
   }
 
   async onOptionsClick(e: Event) {

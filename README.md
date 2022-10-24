@@ -27,16 +27,20 @@ The accessible API of the Location Privacy Toolkit is basically given by the fol
 #### Location Service
 
 The `Location Service` provides the app with the usual interfaces to request location data. First and foremost it reveals access to the actual location data in two ways: A simple method for a one-time location data request.
+
 ```ts
 getCurrentLocation(): Promise<Position | undefined>
 ```
+
 and also request for continuous location updates by registering a simple listener including the ability to unregister it later on.
+
 ```ts
 registerListener(callback: (location: Position | undefined) => void)
 removeListener()
 ```
 
 Additionally the `Location Service` provides the following helper methods for the access-status and request of location data.
+
 ```ts
 canUseLocation(requestPermission: Boolean = false): Promise<Boolean>
 needsLocationAccessRequest(): Promise<Boolean>
@@ -49,23 +53,25 @@ The `Location Privacy Configuration Component` is a central component, that ulti
 In order to address various kinds of users, the `Location Privacy Configuration Component` comes in two modes: a `Expert Mode` and a `Simple Mode`.
 
 ##### Expert Mode
+
 Using the expert mode users have a wide set of options at their hands to be able to manipulate which and how location data is shared with the underlying location based service. Each location privacy option is complemented by a detailed info-view, which educates users about the impact each setting potentially makes to the behaviour of the `Location Service`.
 
-| Location Privacy Option        |    Options                   |
-| ------------------------------ | :--------------------------: |
-| One-time location requests     | Allow / Disallow             | 
-| Continuous location requests   | Allow / Disallow             | 
-| Accuracy                       | 0 / 100 / 500 / 1,000 meters |
-| Interval                       | 0 / 1 / 10 / 30 minutes      | 
+| Location Privacy Option      |           Options            |
+| ---------------------------- | :--------------------------: |
+| One-time location requests   |       Allow / Disallow       |
+| Continuous location requests |       Allow / Disallow       |
+| Accuracy                     | 0 / 100 / 500 / 1,000 meters |
+| Interval                     |   0 / 1 / 10 / 30 minutes    |
 
 ##### Simple Mode
+
 Using the simple mode users have a simple slider at hand that is used to control the `Location Privacy Configuration Component`. This form of interaction comes with 3 presets to use:
 
-| Location Privacy Option        |    Effect                   |
-| ------------------------------ | :--------------------------: |
-| Privacy focus                  | Maximum privacy setting at the expense of service quality | 
-| Balanced                       | Balance between privacy and service quality  | 
-| Service focus                  | Maximum service quality at the expense of privacy |
+| Location Privacy Option |                          Effect                           |
+| ----------------------- | :-------------------------------------------------------: |
+| Privacy focus           | Maximum privacy setting at the expense of service quality |
+| Balanced                |        Balance between privacy and service quality        |
+| Service focus           |     Maximum service quality at the expense of privacy     |
 
 ##### Location History
 
