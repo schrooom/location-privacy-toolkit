@@ -18,9 +18,11 @@ export const en: Translation = {
       locationOption: {
         simple: {
           title: 'Service quality',
-          subtitle: 'lorem ipsum …',
-          description: 'lorem ipsum …',
-          detailDescription: 'lorem ipsum …',
+          subtitle: 'Choose to what degree your location data ',
+          description:
+            'Choose to what degree your location data is used by the underlying service. ',
+          detailDescription:
+            '<b>Privacy focus</b> provides the service with the bare minimum of location data, which might limit the features of the service.<br><b>Compromise</b> provides the service with a balanced amount of location data. Usually most of the features of services work mostly as intended.<br><b>Service focus</b> provides the service with the maximum amount of location data. All location-based features should work as intended, but the service potentially gains more location data from you than actually needed.',
           level0: 'privacy focus',
           level1: 'compromise',
           level2: 'service focus',
@@ -52,13 +54,15 @@ export const en: Translation = {
         punctualAccess: {
           title: 'Punctual locations',
           subtitle: 'Find locations when explicitly demanded',
-          description: 'lorem ipsum …',
+          description:
+            'This provides the underlying service with access to singular location requests, such as retrieving your location once to provide information in your area.',
           detailDescription: '',
         },
         continuousAccess: {
           title: 'Continuous locations',
           subtitle: 'Continuously use your current location, e.g. to navigate',
-          description: 'lorem ipsum …',
+          description:
+            'This provides the underlying service with access to continuous location requests, such as navigation alongside a calculated route.',
           detailDescription: '',
         },
         rating: {
@@ -84,8 +88,10 @@ export const en: Translation = {
         history: {
           title: 'Location history',
           subtitle: 'Manage your locations',
-          description: 'lorem ipsum …',
-          detailDescription: 'lorem ipsum …',
+          description:
+            "Explore and manage your personal location history. Delete locations that you don't want to be used by the service anymore.",
+          detailDescription:
+            'Explore your location history by using various visualization modes and filter them by date. You can choose to delete each location.<br>Additionally a demo mode lets you explore these features in a sandbox environment without affecting your actual data.',
           deleteDialogTitle: 'Are you sure to delete this location?',
           demoDataTitle: 'demo',
           noLocationsMessage: 'There are no locations in your history.',
