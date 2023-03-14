@@ -1,4 +1,4 @@
-# Location Privacy Toolkit by SIMPORT &middot; <a href="https://github.com/schrooom/location-privacy-toolkit/actions/workflows/run-tests.yml"><img src="https://github.com/schrooom/location-privacy-toolkit/actions/workflows/run-tests.yml/badge.svg"></a>
+# Location Privacy Toolkit by SIMPORT &middot; 
 
 </br>
 
