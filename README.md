@@ -8,7 +8,7 @@
 
 Location Privacy Toolkit, that can be included into Angular and Ionic based mobile apps. This toolkit is aimed to be used as a replacement for usual location APIs. The goal of this toolkit is to allow users to actively control and monitor, which data is used by an app. Furthermore users can set preferences to the usage of location data using fine-grained control mechanisms. This is part of the [SIMPORT][simport] project.
 
-> **Status**: prototyping 🛠️
+> **Status**: Released (V1) 
 
 ## Contents
 
